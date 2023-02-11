@@ -1,0 +1,20 @@
+{
+  "name": "numuseumapi",
+  "version": "1.0.0",
+  "description": "The NuMuseum API will return information about the items in the NuMuseum virtual collection. This information will include descriptions, types (eg sculpture, architecture, painting etc), mediums, dimensions, artists and more. It will also return information about the artists, types and potentially more. The API will enable user registration, user-generated lists of favourite works and deleting accounts.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DelacorteClock/NuMuseumAPI.git"
+  },
+  "keywords": [],
+  "author": "Standard PVC Company",
+  "license": "NONE",
+  "bugs": {
+    "url": "https://github.com/DelacorteClock/NuMuseumAPI/issues"
+  },
+  "homepage": "https://github.com/johndoe/my-first-package"
+}
