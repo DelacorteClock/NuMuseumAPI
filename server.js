@@ -10,10 +10,10 @@ http.createServer(function (request, response) {
     if (interpreted.pathname.includes('documentation')) {
         filePath = (__dirname + '/documentation.html');
     } else {
-        filePath = 'index.html';
+        filePath = 'index.html'; 
     }
     //Add log information to log.txt
-    fs.appendFile('log.txt', 'User requested ' + address + ' at ' + new Date() + '\n\n', function (error) {
+    fs.appendFile('log.txt', 'User requested ' + address + ' at ' + new Intl.DateTimeFormat('en-GB', {dateStyle: 'full', timeStyle: 'long', timeZone: 'UTC'}).format(new Date()) + '\n\n', function (error) {
         if (error) {
             console.log(error);
         } else {
