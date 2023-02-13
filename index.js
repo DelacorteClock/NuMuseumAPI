@@ -1,4 +1,7 @@
+//Express tools
 const express = require('express'), app = express();
+//Log tools
+const morgan = require('morgan');
 
 var museumItems = [
     {
@@ -381,8 +384,17 @@ var museumItems = [
     }
 ];
 
+//Add requests to log
+app.use(morgan('common'));
+
 //For documentation.html and css
 app.use(express.static('public'));
+
+//Generic error notification 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('ERROR ERROR');
+});
 
 //For sample json
 app.get('/collection', function (req, res) {
