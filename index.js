@@ -1,7 +1,5 @@
-//Express tools
-const express = require('express'), app = express();
-//Log tools
-const morgan = require('morgan');
+//Key tools
+const express = require('express'), app = express(), morgan = require('morgan'), bodyParser = require('body-parser'), uuid = require('uuid');
 
 var museumItems = [
     {
