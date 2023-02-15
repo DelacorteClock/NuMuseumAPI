@@ -486,14 +486,16 @@ var appUsers = [
         "surname": "Rabitana",
         "username": "RabbitNew",
         "code": "IAmTheBestRabbitInTheUniverse",
-        "id": "8e3652c8-6ca7-4f90-bf89-d174c2a19140"
+        "id": "8e3652c8-6ca7-4f90-bf89-d174c2a19140",
+        "favouriteItems": []
     },
     {
         "forename": "Dulim",
         "surname": "Unhun",
         "username": "ManySilhouettes",
         "code": "IncorrectDuckCodeComputer",
-        "id": "351b72f9-4314-4809-bc0e-6b87a1ed41b4"
+        "id": "351b72f9-4314-4809-bc0e-6b87a1ed41b4",
+        "favouriteItems": []
     }
 ];
 
@@ -593,6 +595,7 @@ app.post('/users', function (req, res) {
             //Login info--maybe add email, telephone etc later
             if (userInfo.username && userInfo.code) {
                 userInfo.id = uuid.v4();
+                userInfo.favouriteItems = [];
                 appUsers.push(userInfo);
                 res.status(201).json(userInfo);
             } else {
@@ -642,6 +645,31 @@ app.put('/users/:id', function (req, res) {
         }
     } else {
         res.status(400).send(`FAILURE --> NO USER WITH ID ${id}`);
+    }
+});
+
+//Post favourite item based on user ID and object ID
+app.post('/users/:id/:objectID', function (req, res) {
+    const {id, objectID} = req.params;
+    
+    var userInfo = appUsers.find(function (user) {
+        return user.id === id;
+    });
+    
+    const item = museumItems.find(function (item) {
+        return item.objectID === objectID;
+    });
+    
+    //Info about success and different failure types 
+    if (userInfo && item) {
+        userInfo.favouriteItems.push(objectID);
+        res.status(200).send(`SUCCESS --> Item ID${objectID} titled '${item.title}' is now part of ${userInfo.forename} ${userInfo.surname}'s array of favourites. (User ID${id})`);
+    } else if (userInfo && !item) {
+        res.status(400).send(`FAILURE --> ITEM ID${objectID} DOES NOT EXIST : EXISTING USER ${userInfo.forename} ${userInfo.surname}'S ARRAY OF FAVOURITES NOT UPDATED (USER ID ${id})`);
+    } else if (!userInfo && item) {
+        res.status(400).send(`FAILURE --> USER ID${id} DOES NOT EXIST : EXISTING ITEM ID${objectID} TITLED '${item.title}' NOT ADDED TO ARRAY OF FAVOURITES`);
+    } else {
+        res.status(400).send(`FAILURE --> USER ID${id} DOES NOT EXIST AND ITEM ID${objectID} DOES NOT EXIST`);
     }
 });
 
