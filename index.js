@@ -660,9 +660,9 @@ app.delete('/users/:id', function (req, res) {
         appUsers = appUsers.filter(function (user) {
             return user.id !== id;
         });
-        res.json(appUsers);
+        res.status(200).send(`SUCCESS --> USER ID${id} REMOVED`);
     } else {
-        res.status(400).send(`FAILURE --> NO USER WITH ID ${id}`);
+        res.status(400).send(`FAILURE --> NO USER WITH ID${id}`);
     }
 });
 
