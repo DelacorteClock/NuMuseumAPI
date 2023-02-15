@@ -382,21 +382,122 @@ var museumItems = [
     }
 ];
 
+var museumDepartments = [
+    {
+        "deptID": "0",
+        "deptTitle": "Painting",
+        "deptDesc": "NuMuseum's Painting Department (PD) is focused on physical paintings, drawings, illustrations and other forms of two-dimensional art made in the 21st century. Officials at the PD store, investigate, maintain and write about the works in the collection. It is currently not possible to see any items from the PD in person because they are stored in the NuMuseum private collection."
+    },
+    {
+        "deptID": "1",
+        "deptTitle": "Sculpture",
+        "deptDesc": "NuMuseum's Sculpture Department (PD) is focused on physical sculptures and other forms of three-dimensional art made in the 21st century. Officials at the SD store, investigate, maintain and write about the works in the collection. It is currently not possible to see any items from the SD in person because they are stored in the NuMuseum private collection."
+    },
+    {
+        "deptID": "2",
+        "deptTitle": "Literature",
+        "deptDesc": "NuMuseum's Literature Department (LD) maintains a collection of written work including stories and poems. All items in the LD are from the 21st century. Officials at the LD identify works to add to the NuMuseum collection by investigating their contents. The items in the LD are in a mix of digital and hand-written formats. It is not possible to see hand-written items in person because they are stored in the NuMuseum private collection."
+    },
+    {
+        "deptID": "3",
+        "deptTitle": "Clothing",
+        "deptDesc": "NuMuseum's Clothing Department (CD) maintains a physical collection of rare, artistic and notable articles of clothing. Articles in the collection include dresses, pants, shirts and skirts. Officials at the CD do their best to ensure that the often rare or unconventional materials from which the collection items are made are not dirtied, damaged or torn. All items are in a private collection and used by the museum founder when travelling. Items may exit the collection occasionally because of reasons including fitting the museum founder poorly or being banned (eg for toxic scents) because of popular vote by museum officials."
+    },
+    {
+        "deptID": "4",
+        "deptTitle": "Film",
+        "deptDesc": "NuMuseum's Film Department (FD) maintains a digital collection of recorded, photographical and animated films from the 21st century. All films in the collection are the property of the NuMuseum itself. "
+    },
+    {
+        "deptID": "5",
+        "deptTitle": "Architecture",
+        "deptDesc": "NuMuseum's Architecture Department (AD) maintains a digital collection of architectural concepts and models. The items in the collection are stored mainly in the 3mf file format which allows them to be visited and photographed virtually at any time by museum officials."
+    },
+    {
+        "deptID": "6",
+        "deptTitle": "Virtual Painting",
+        "deptDesc": "ADD DESC"
+    },
+    {
+        "deptID": "7",
+        "deptTitle": "Virtual Sculpture",
+        "deptDesc": "ADD DESC"
+    },
+    {
+        "deptID": "8",
+        "deptTitle": "Design",
+        "deptDesc": "ADD DESC"
+    },
+    {
+        "deptID": "9",
+        "deptTitle": "Miscellaneous",
+        "deptDesc": "ADD DESC"
+    }
+];
+
 //Add requests to log
-app.use(morgan('common'));
+app.use(morgan('combined'));
 
 //For documentation.html and css
 app.use(express.static('public'));
 
 //Generic error notification 
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('ERROR ERROR');
+    console.error(err.stack);
+    res.status(500).send('ERROR ERROR');
 });
 
-//For sample json
+//Get info about all items in virtual museum
 app.get('/collection', function (req, res) {
-    res.json(museumItems);
+    res.status(200).json(museumItems);
+});
+
+//Get info about item with specific title
+app.get('/collection/title/:title', function (req, res) {
+    const title = req.params.title;
+    const item = museumItems.find(function (item) {
+        return item.title === title;
+    });
+
+    if (item) {
+        res.status(200).json(item);
+    } else {
+        res.status(400).send(`FAILURE --> ITEM '${title}' NOT IN NUMUSEUM`);
+    }
+});
+
+//Get info about item with specific id
+app.get('/collection/id/:id', function (req, res) {
+    const id = req.params.id;
+    const item = museumItems.find(function (item) {
+        return item.objectID === id;
+    });
+
+    if (item) {
+        res.status(200).json(item);
+    } else {
+        res.status(400).send(`FAILURE --> ITEM ID${id} NOT IN NUMUSEUM`);
+    }
+});
+
+//Get info about all departments
+//Separate sample json for departments to avoid storing dept info in each item in collection
+app.get('/departments', function (req, res) {
+    res.status(200).json(museumDepartments);
+});
+
+//Get info about department by id
+app.get('/departments/id/:id', function (req, res) {
+    const id = req.params.id;
+    const dept = museumDepartments.find(function (dept) {
+        return dept.deptID === id;
+    });
+
+    if (dept) {
+        res.status(200).json(dept);
+    } else {
+        res.status(400).send(`FAILURE --> DEPARTMENT ID${id} NOT IN NUMUSEUM`);
+    }
 });
 
 //Standard text for '/'
@@ -405,5 +506,5 @@ app.get('/', function (req, res) {
 });
 
 app.listen(1618, () => {
-  console.log('APPLICATION ACTIVE ---> LISTENING @ PORT 1618');
+    console.log('APPLICATION ACTIVE ---> LISTENING @ PORT 1618');
 });
