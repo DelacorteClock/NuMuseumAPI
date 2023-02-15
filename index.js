@@ -480,7 +480,22 @@ var museumArtists = [
     }
 ];
 
-var appUsers = [];
+var appUsers = [
+    {
+        "forename": "Minobbiane",
+        "surname": "Rabitana",
+        "username": "RabbitNew",
+        "code": "IAmTheBestRabbitInTheUniverse",
+        "id": "8e3652c8-6ca7-4f90-bf89-d174c2a19140"
+    },
+    {
+        "forename": "Dulim",
+        "surname": "Unhun",
+        "username": "ManySilhouettes",
+        "code": "IncorrectDuckCodeComputer",
+        "id": "351b72f9-4314-4809-bc0e-6b87a1ed41b4"
+    }
+];
 
 //Add requests to log
 app.use(morgan('combined'));
@@ -572,17 +587,61 @@ app.get('/artists/name/:name', function (req, res) {
 //Post new user info
 app.post('/users', function (req, res) {
     const userInfo = req.body;
-    
+
     if (userInfo.forename) {
         if (userInfo.surname) {
-            userInfo.id = uuid.v4();
-            appUsers.push(userInfo);
-            res.status(201).json(userInfo);
+            //Login info--maybe add email, telephone etc later
+            if (userInfo.username && userInfo.code) {
+                userInfo.id = uuid.v4();
+                appUsers.push(userInfo);
+                res.status(201).json(userInfo);
+            } else {
+                res.status(400).send('FAILURE --> BAD USER LOGIN INFO');
+            }
         } else {
             res.status(400).send('FAILURE --> NO USER SURNAME');
         }
     } else {
         res.status(400).send('FAILURE --> NO USER FORENAME');
+    }
+});
+
+//Put user update by id
+app.put('/users/:id', function (req, res) {
+    const id = req.params.id;
+    const editedInfo = req.body;
+
+    var userInfo = appUsers.find(function (user) {
+        return user.id === id;
+    });
+
+    if (userInfo) {
+        //Count if any pieces of info were updated
+        count = 0;
+        //Check what updateable pieces of information got updated
+        if (editedInfo.forename) {
+            userInfo.forename = editedInfo.forename;
+            count++;
+        }
+        if (editedInfo.surname) {
+            userInfo.surname = editedInfo.surname;
+            count++;
+        }
+        if (editedInfo.username) {
+            userInfo.username = editedInfo.username;
+            count++;
+        }
+        if (editedInfo.code) {
+            userInfo.code = editedInfo.code;
+            count++;
+        }
+        if (count) {
+            res.status(200).json(userInfo);
+        } else {
+            res.status(400).send(`FAILURE --> NO INFORMATION UPDATED FOR EXISTING USER ${id}`);
+        }
+    } else {
+        res.status(400).send(`FAILURE --> NO USER WITH ID ${id}`);
     }
 });
 
