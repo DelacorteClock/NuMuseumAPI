@@ -575,7 +575,7 @@ app.post('/users', function (req, res) {
     
     if (userInfo.forename) {
         if (userInfo.surname) {
-            userInfo.id = uuid.v4;
+            userInfo.id = uuid.v4();
             appUsers.push(userInfo);
             res.status(201).json(userInfo);
         } else {
