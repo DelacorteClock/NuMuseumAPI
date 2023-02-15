@@ -11,12 +11,20 @@
     src: url('MFB.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: MS;
+    font-weight: regular;
+    src: url('MSF.ttf') format('truetype');
+}
+
 /*****VARIABLES*****/
 
 :root {
     /**COLOUR**/
     --keygreen: #00985F;
-    --keybrown: #351c15;
+    --keybrown: #351C15;
+    --codetext: #EE8DC2;
+    --codehighlight: #00000000; 
     --altbackground: #FFF;
     --warningyellow: #FCCC0A;
     --warningtext: #351c15;
@@ -72,6 +80,30 @@ body {
     margin: 50px auto;
     line-height: 100%;
     text-align: center;
+}
+
+td {
+    border: 1px solid;
+    border-color: white;
+    border-radius: 4px;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+th {
+    border: 2px solid;
+    border-color: white;
+    border-radius: 4px;
+    text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+code {
+    font-family: MS;
+    background-color: var(--codehighlight);
+    color: var(--codetext);
 }
 
 /*****CLASSES*****/
