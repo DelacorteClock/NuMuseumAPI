@@ -435,11 +435,61 @@ var museumDepartments = [
     }
 ];
 
+var museumArtists = [
+    {
+        "artistName": "Anonymous",
+        "artistBiography": "Anonymous artists/designers designed several items in the NuMuseum--most notably those in the clothing collection.",
+        "artistStart": "0",
+        "artistMedium": "Multiple"
+    },
+    {
+        "artistName": "ClassicalFilm",
+        "artistBiography": "ADD DESC",
+        "artistStart": "2012",
+        "artistMedium": "Film"
+    },
+    {
+        "artistName": "Minobbiane",
+        "artistBiography": "Minobbiane is a rabbit who likes to write stories and gets inpiration from the city in which it lives.",
+        "artistStart": "2009",
+        "artistMedium": "Written"
+    },
+    {
+        "artistName": "PVC Doric Duck",
+        "artistBiography": "ADD DESC",
+        "artistStart": "2021",
+        "artistMedium": "Film"
+    },
+    {
+        "artistName": "Quik the Artist",
+        "artistBiography": "Quik the Artist is a duck who thinks and draws in a two dimensional way. Quik the Artist resides in the dome of a tall and historical hotel building",
+        "artistStart": "2020",
+        "artistMedium": "Painting + Digital"
+    },
+    {
+        "artistName": "Solid Architecture",
+        "artistBiography": "ADD DESC",
+        "artistStart": "2022",
+        "artistMedium": "Digital"
+    },
+    {
+        "artistName": "Standard PVC",
+        "artistBiography": "ADD DESC",
+        "artistStart": "2022",
+        "artistMedium": "Digital"
+    }
+];
+
+var appUsers = [];
+
 //Add requests to log
 app.use(morgan('combined'));
 
 //For documentation.html and css
 app.use(express.static('public'));
+
+//For body parser
+app.use(bodyParser.json());
 
 //Generic error notification 
 app.use((err, req, res, next) => {
@@ -500,9 +550,40 @@ app.get('/departments/id/:id', function (req, res) {
     }
 });
 
-//Standard text for '/'
-app.get('/', function (req, res) {
-    res.send('NuMuseum API: A Standard PVC Product');
+//Get info about all artists
+app.get('/artists', function (req, res) {
+    res.status(200).json(museumArtists);
+});
+
+//Get info about artist based on specific name
+app.get('/artists/name/:name', function (req, res) {
+    const name = req.params.name;
+    const artist = museumArtists.find(function (artist) {
+        return artist.artistName === name;
+    });
+
+    if (artist) {
+        res.status(200).json(artist);
+    } else {
+        res.status(400).send(`FAILURE --> ARTIST ${name} NOT IN NUMUSEUM`);
+    }
+});
+
+//Post new user info
+app.post('/users', function (req, res) {
+    const userInfo = req.body;
+    
+    if (userInfo.forename) {
+        if (userInfo.surname) {
+            userInfo.id = uuid.v4;
+            appUsers.push(userInfo);
+            res.status(201).json(userInfo);
+        } else {
+            res.status(400).send('FAILURE --> NO USER SURNAME');
+        }
+    } else {
+        res.status(400).send('FAILURE --> NO USER FORENAME');
+    }
 });
 
 app.listen(1618, () => {
