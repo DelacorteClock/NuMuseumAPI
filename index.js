@@ -648,6 +648,24 @@ app.put('/users/:id', function (req, res) {
     }
 });
 
+//Delete user based on id
+app.delete('/users/:id', function (req, res) {
+    const id = req.params.id;
+    
+    var userInfo = appUsers.find(function (user) {
+       return user.id === id;
+    });
+    
+    if (userInfo) {
+        appUsers = appUsers.filter(function (user) {
+            return user.id !== id;
+        });
+        res.json(appUsers);
+    } else {
+        res.status(400).send(`FAILURE --> NO USER WITH ID ${id}`);
+    }
+});
+
 //Post favourite item based on user ID and object ID
 app.post('/users/:id/:objectID', function (req, res) {
     const {id, objectID} = req.params;
@@ -687,7 +705,9 @@ app.delete('/users/:id/:objectID', function (req, res) {
     
     //Info about success and different failure types 
     if (userInfo && item) {
-        userInfo.favouriteItems = userInfo.favouriteItems.filter(idNum => idNum !== objectID);
+        userInfo.favouriteItems = userInfo.favouriteItems.filter(function (idNum) {
+            return idNum !== objectID;
+        });
         res.status(200).send(`SUCCESS --> Item ID${objectID} titled '${item.title}' is no longer part of ${userInfo.forename} ${userInfo.surname}'s array of favourites. (User ID${id})`);
     } else if (userInfo && !item) {
         res.status(400).send(`FAILURE --> ITEM ID${objectID} DOES NOT EXIST : EXISTING USER ${userInfo.forename} ${userInfo.surname}'S ARRAY OF FAVOURITES NOT UPDATED (USER ID ${id})`);
@@ -698,6 +718,6 @@ app.delete('/users/:id/:objectID', function (req, res) {
     }
 });
 
-app.listen(1618, () => {
+app.listen(1618, function () {
     console.log('APPLICATION ACTIVE ---> LISTENING @ PORT 1618');
 });
