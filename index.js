@@ -487,7 +487,7 @@ var appUsers = [
         "username": "RabbitNew",
         "code": "IAmTheBestRabbitInTheUniverse",
         "id": "8e3652c8-6ca7-4f90-bf89-d174c2a19140",
-        "favouriteItems": []
+        "favouriteItems": ['2230001','2230021','1250031']
     },
     {
         "forename": "Dulim",
@@ -668,6 +668,31 @@ app.post('/users/:id/:objectID', function (req, res) {
         res.status(400).send(`FAILURE --> ITEM ID${objectID} DOES NOT EXIST : EXISTING USER ${userInfo.forename} ${userInfo.surname}'S ARRAY OF FAVOURITES NOT UPDATED (USER ID ${id})`);
     } else if (!userInfo && item) {
         res.status(400).send(`FAILURE --> USER ID${id} DOES NOT EXIST : EXISTING ITEM ID${objectID} TITLED '${item.title}' NOT ADDED TO ARRAY OF FAVOURITES`);
+    } else {
+        res.status(400).send(`FAILURE --> USER ID${id} DOES NOT EXIST AND ITEM ID${objectID} DOES NOT EXIST`);
+    }
+});
+
+//Delete favourite item based on user ID and object ID
+app.delete('/users/:id/:objectID', function (req, res) {
+    const {id, objectID} = req.params;
+    
+    var userInfo = appUsers.find(function (user) {
+        return user.id === id;
+    });
+    
+    const item = museumItems.find(function (item) {
+        return item.objectID === objectID;
+    });
+    
+    //Info about success and different failure types 
+    if (userInfo && item) {
+        userInfo.favouriteItems = userInfo.favouriteItems.filter(idNum => idNum !== objectID);
+        res.status(200).send(`SUCCESS --> Item ID${objectID} titled '${item.title}' is no longer part of ${userInfo.forename} ${userInfo.surname}'s array of favourites. (User ID${id})`);
+    } else if (userInfo && !item) {
+        res.status(400).send(`FAILURE --> ITEM ID${objectID} DOES NOT EXIST : EXISTING USER ${userInfo.forename} ${userInfo.surname}'S ARRAY OF FAVOURITES NOT UPDATED (USER ID ${id})`);
+    } else if (!userInfo && item) {
+        res.status(400).send(`FAILURE --> USER ID${id} DOES NOT EXIST : EXISTING ITEM ID${objectID} TITLED '${item.title}' NOT REMOVED FROM ARRAY OF FAVOURITES`);
     } else {
         res.status(400).send(`FAILURE --> USER ID${id} DOES NOT EXIST AND ITEM ID${objectID} DOES NOT EXIST`);
     }
