@@ -1,6 +1,15 @@
 //Key tools
 const express = require('express'), app = express(), morgan = require('morgan'), bodyParser = require('body-parser'), uuid = require('uuid');
 
+//Integration of mongoose
+const mongoose = require('mongoose');
+const Models = require('./models.js');
+const Artists = Models.Artist;
+const Departments = Models.Department;
+const Items = Models.Item;
+const Users = Models.User;
+mongoose.connect('mongodb://localhost:27017/NuMuseum', {useNewUrlParser: true, useUnifiedTopology: true});
+
 //Add requests to log
 app.use(morgan('combined'));
 
