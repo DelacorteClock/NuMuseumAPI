@@ -21,7 +21,7 @@ var userSchema = mongoose.Schema({
     userEmail: {type: String, required: true},
     userCelebrate: Date,
     userFavourites: [{type: mongoose.Schema.Types.ObjectId, ref: 'Item'}]
-});
+},{versionKey: false});
 
 var itemSchema = mongoose.Schema({
     itemId: {type: String, required: true},
