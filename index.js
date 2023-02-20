@@ -8,7 +8,7 @@ const Artists = Models.Artist;
 const Departments = Models.Department;
 const Items = Models.Item;
 const Users = Models.User;
-mongoose.connect('mongodb://localhost:27017/NuMuseum', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://127.0.0.1:27017/NuMuseumV2', {useNewUrlParser: true, useUnifiedTopology: true});
 
 //Add requests to log
 app.use(morgan('combined'));
@@ -30,76 +30,119 @@ app.get('/', function (req, res) {
     res.status(200).send('You are in the 16 Feb 2023 version of NuMuseum API. Go to documentation.html to learn how to use it.');
 });
 
-//Get info about all items in virtual museum
+//Get info about all items in collection
 app.get('/collection', function (req, res) {
-    res.status(200).json(museumItems);
+    Items.find().then(function (items) {
+        res.status(200).json(items);
+    }).catch(function (err) {
+        console.error(err);
+        res.status(500).send('FAILURE --> ' + err);
+    });
 });
 
 //Get info about item with specific title
 app.get('/collection/title/:title', function (req, res) {
     const title = req.params.title;
-    const item = museumItems.find(function (item) {
-        return item.title === title;
+    Items.findOne({title: title}).then(function (item) {
+       if (item) {
+           res.status(200).json(item);
+       } else {
+           res.status(400).send(`FAILURE --> ITEM '${title}' NOT IN NUMUSEUM`);
+       }
+    }).catch(function (err) {
+        console.error(err);
+        res.status(500).send('FAILURE --> ' + err);
     });
-
-    if (item) {
-        res.status(200).json(item);
-    } else {
-        res.status(400).send(`FAILURE --> ITEM '${title}' NOT IN NUMUSEUM`);
-    }
 });
 
 //Get info about item with specific id
 app.get('/collection/id/:id', function (req, res) {
     const id = req.params.id;
-    const item = museumItems.find(function (item) {
-        return item.objectID === id;
+    Items.findOne({itemId: id}).then(function (item) {
+        if (item) {
+            res.status(200).json(item);
+        } else {
+            res.status(400).send(`FAILURE --> ITEM ID${id} NOT IN NUMUSEUM`);
+        }
+    }).catch(function (err) {
+        console.error(err);
+        res.status(500).send('FAILURE --> ' + err);
     });
-
-    if (item) {
-        res.status(200).json(item);
-    } else {
-        res.status(400).send(`FAILURE --> ITEM ID${id} NOT IN NUMUSEUM`);
-    }
 });
 
 //Get info about all departments
-//Separate sample json for departments to avoid storing dept info in each item in collection
 app.get('/departments', function (req, res) {
-    res.status(200).json(museumDepartments);
+    Departments.find().then(function (departments) {
+        res.status(200).json(departments);
+    }).catch(function (err) {
+        console.error(err);
+        res.status(500).send('FAILURE --> ' + err);
+    });
 });
 
-//Get info about department by id
+//Get info about department based on id
 app.get('/departments/id/:id', function (req, res) {
     const id = req.params.id;
-    const dept = museumDepartments.find(function (dept) {
-        return dept.deptID === id;
+    Departments.findOne({deptId: id}).then(function (department) {
+        if (department) {
+            res.status(200).json(department);
+        } else {
+            res.status(400).send(`FAILURE --> DEPARTMENT ID${id} NOT IN NUMUSEUM`);
+        }
+    }).catch(function (err) {
+        console.error(err);
+        res.status(500).send('FAILURE --> ' + err);
     });
-
-    if (dept) {
-        res.status(200).json(dept);
-    } else {
-        res.status(400).send(`FAILURE --> DEPARTMENT ID${id} NOT IN NUMUSEUM`);
-    }
 });
 
 //Get info about all artists
 app.get('/artists', function (req, res) {
-    res.status(200).json(museumArtists);
+    Artists.find().then(function (artists) {
+        res.status(200).json(artists);
+    }).catch(function (err) {
+        console.error(err);
+        res.status(500).send('FAILURE --> ' + err);
+    });
 });
 
 //Get info about artist based on specific name
 app.get('/artists/name/:name', function (req, res) {
     const name = req.params.name;
-    const artist = museumArtists.find(function (artist) {
-        return artist.artistName === name;
+    Artists.findOne({artistName: name}).then(function (artist) {
+        if (artist) {
+            res.status(200).json(artist);
+        } else {
+            res.status(400).send(`FAILURE --> ARTIST '${name}' NOT IN NUMUSEUM`);
+        }
+    }).catch(function (err) {
+        console.error(err);
+        res.status(500).send('FAILURE --> ' + err);
     });
+});
 
-    if (artist) {
-        res.status(200).json(artist);
-    } else {
-        res.status(400).send(`FAILURE --> ARTIST ${name} NOT IN NUMUSEUM`);
-    }
+//NEW --> Get info about all users
+app.get('/users', function(req, res) {
+    Users.find().then(function (users) {
+        res.status(200).json(users);
+    }).catch(function (err) {
+        console.error(err);
+        res.status(500).send('FAILURE --> ' + err);
+    });
+});
+
+//NEW --> Get info about user based on username
+app.get('/users/username/:username', function (req, res) {
+    username = req.params.username;
+    Users.findOne({userUsername: username}).then(function (user) {
+        if (user) {
+            res.status(200).json(user);
+        } else {
+            res.status(400).send(`FAILURE --> USER '${username}' NOT IN NUMUSEUM`);
+        }
+    }).catch(function (err) {
+        console.error(err);
+        res.status(500).send('FAILURE --> ' + err);
+    });
 });
 
 //Post new user info
