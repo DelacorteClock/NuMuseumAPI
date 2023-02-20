@@ -233,8 +233,8 @@ app.post('/users/username/:username/favitem/:favitemid', function (req, res) {
                     console.error(err);
                     res.status(500).send('FAILURE --> ' + err);
                 } else {
-                    res.json(updatedInfo);
-                    //res.status(200).send(`SUCCESS --> Item ID${favitemid} is now part of the favourite item array of `);
+                    //res.json(updatedInfo);
+                    res.status(200).send(`SUCCESS --> Item ID${favitemid} is now part of the favourite item array of user with username '${username}'.`);
                 }
             });
         } else {
@@ -246,31 +246,27 @@ app.post('/users/username/:username/favitem/:favitemid', function (req, res) {
     });
 });
 
-//Delete favourite item based on user ID and object ID
-app.delete('/users/:id/:objectID', function (req, res) {
-    const {id, objectID} = req.params;
-
-    var userInfo = appUsers.find(function (user) {
-        return user.id === id;
+//Delete favourite item based on username and item's unique id
+app.delete('/users/username/:username/favitem/:favitemid', function (req, res) {
+    const {username, favitemid} = req.params;
+    Users.findOne({userUsername: username}).then(function (user) {
+        if (user) {
+            Users.findOneAndUpdate({userUsername: username}, {$pull: {userFavourites: favitemid}}, {new : true}, function (err, updatedInfo) {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send('FAILURE --> ' + err);
+                } else {
+                    //res.json(updatedInfo);
+                    res.status(200).send(`SUCCESS --> Item ID${favitemid} is no longer part of the favourite item array of user with username '${username}'.`);
+                }
+            });
+        } else {
+            res.status(400).send(`FAILURE --> NO USER WITH USERNAME '${username}'`);
+        }
+    }).catch(function (err) {
+        console.error(err);
+        res.status(500).send('FAILURE --> ' + err);
     });
-
-    const item = museumItems.find(function (item) {
-        return item.objectID === objectID;
-    });
-
-    //Info about success and different failure types 
-    if (userInfo && item) {
-        userInfo.favouriteItems = userInfo.favouriteItems.filter(function (idNum) {
-            return idNum !== objectID;
-        });
-        res.status(200).send(`SUCCESS --> Item ID${objectID} titled '${item.title}' is no longer part of ${userInfo.forename} ${userInfo.surname}'s array of favourites. (User ID${id})`);
-    } else if (userInfo && !item) {
-        res.status(400).send(`FAILURE --> ITEM ID${objectID} DOES NOT EXIST : EXISTING USER ${userInfo.forename} ${userInfo.surname}'S ARRAY OF FAVOURITES NOT UPDATED (USER ID ${id})`);
-    } else if (!userInfo && item) {
-        res.status(400).send(`FAILURE --> USER ID${id} DOES NOT EXIST : EXISTING ITEM ID${objectID} TITLED '${item.title}' NOT REMOVED FROM ARRAY OF FAVOURITES`);
-    } else {
-        res.status(400).send(`FAILURE --> USER ID${id} DOES NOT EXIST AND ITEM ID${objectID} DOES NOT EXIST`);
-    }
 });
 
 app.listen(1618, function () {
