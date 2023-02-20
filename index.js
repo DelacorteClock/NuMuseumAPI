@@ -145,6 +145,7 @@ app.get('/users/username/:username', function (req, res) {
     });
 });
 
+//Post new user
 app.post('/users', function (req, res) {
     const info = req.body;
     Users.findOne({userUsername: info.userUsername}).then(function (user) {
@@ -172,30 +173,39 @@ app.post('/users', function (req, res) {
     });
 });
 
-//Post new user info
-app.post('/1111users', function (req, res) {
-    const userInfo = req.body;
-    if (userInfo.forename) {
-        if (userInfo.surname) {
-            //Login info--maybe add email, telephone etc later
-            if (userInfo.username && userInfo.code) {
-                userInfo.id = uuid.v4();
-                userInfo.favouriteItems = [];
-                appUsers.push(userInfo);
-                res.status(201).json(userInfo);
-            } else {
-                res.status(400).send('FAILURE --> BAD USER LOGIN INFO');
-            }
+//Put user update based on username and req body
+app.put('/users/username/:username', function (req, res) {
+    username = req.params.username;
+    newInfo = req.body;
+    Users.findOne({userUsername: username}).then(function (user) {
+        if (user) {
+            Users.findOneAndUpdate({userUsername: username}, {$set: {
+                    userForename: newInfo.userForename,
+                    userSurname: newInfo.userSurname,
+                    userUsername: newInfo.userUsername,
+                    userCode: newInfo.userCode,
+                    userEmail: newInfo.userEmail,
+                    userCelebrate: newInfo.userCelebrate
+                }
+            }, {new: true}, function (err, updatedInfo) {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send('FAILURE --> ' + err);
+                } else {
+                    res.status(200).json(updatedInfo);
+                }
+            });
         } else {
-            res.status(400).send('FAILURE --> NO USER SURNAME');
+            res.status(400).send(`FAILURE --> NO USER WITH USERNAME '${username}'`);
         }
-    } else {
-        res.status(400).send('FAILURE --> NO USER FORENAME');
-    }
+    }).catch(function (err) {
+        console.error(err);
+        res.status(500).send('FAILURE --> ' + err);
+    });
 });
 
 //Put user update by id
-app.put('/users/:id', function (req, res) {
+app.put('/1111users/:id', function (req, res) {
     const id = req.params.id;
     const editedInfo = req.body;
 
