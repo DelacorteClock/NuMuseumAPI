@@ -34,7 +34,7 @@
                         <td>/collection</td>
                         <td>GET</td>
                         <td>None</td>
-                        <td>A json with info about each item in the virtual museum</td>
+                        <td>A json with info about each item in the virtual museum populated with artist and department info</td>
                     </tr>
                     <tr>
                         <td>Get info about item with specific title</td>
@@ -43,24 +43,36 @@
                         <td>None</td>
                         <td>A json with info about one item in the NuMuseum like: <br>
                             <code>{ <br>
-                                "objectID": "2230001", <br>
-                                "title": "Rubber Suit (Black)", <br>
-                                "artistDisplayName": "Anonymous", <br>
-                                "exhibit": "Contemporary Clothing", <br>
-                                "primaryImage": "NONE", <br>
-                                "additionalImages": "NONE", <br>
-                                "videoURL": "NONE", <br>
-                                "infoURL": "NONE", <br>
-                                "objectName": "Shirt/Pants", <br>
-                                "objectDate": "2022", <br>
-                                "medium": "Rubber", <br>
-                                "dimensions": "90 x 55", <br>
-                                "description": "This contemporary piece of artistic clothing is comprised of a shirt connected to pants. Its construction from an unconventional material (black rubber) increases its visual impact.", <br>
-                                "department": "3 Clothing", <br>
-                                "isPublicDomain": "FALSE", <br>
-                                "isFeatured": "TRUE" <br>
+                                "_id": "63f1ada30f6f179c878ec210", <br>
+                                "itemId": "2230011",<br>
+                                "title": "The Leathers",<br>
+                                "artist": {<br>
+                                "_id": "63f1997d0f6f179c878ec1a5",<br>
+                                "artistName": "Anonymous",<br>
+                                "artistBiography": "Anonymous artists/designers designed several items in the NuMuseum--most notably those in the clothing collection.",<br>
+                                "artistStart": "ND",<br>
+                                "artistMedium": [<br>
+                                "Multiple"<br>
+                                ]<br>
+                                },<br>
+                                "exhibit": "Contemporary Clothing",<br>
+                                "primaryImage": "https://delacorteclock.github.io/NuMuseumImages/2230011.png",<br>
+                                "links": [],<br>
+                                "objectName": "Pants",<br>
+                                "objectDate": "2022",<br>
+                                "medium": "Leather",<br>
+                                "dimensions": [110, 30], <br>
+                                "description": "These contemporary pants make a powerful--almost jarring--impact.", <br>
+                                "department": { <br>
+                                "_id": "63f19cff0f6f179c878ec1bd", <br>
+                                "deptTitle": "Clothing", <br>
+                                "deptDescription": "NuMuseum's Clothing Department (CD) maintains a physical collection of rare, artistic and notable articles of clothing. Articles in the collection include dresses, pants, shirts and skirts. Officials at the CD do their best to ensure that the often rare or unconventional materials from which the collection items are made are not dirtied, damaged or torn. All items are in a private collection and used by the museum founder when travelling. Items may exit the collection occasionally because of reasons including fitting the museum founder poorly or being banned (eg for toxic scents) because of popular vote by museum officials.", <br>
+                                "deptId": "3" <br>
+                                },<br>
+                                "isPublicDomain": false,<br>
+                                "isFeatured": false<br>
                                 }</code> <br>
-                            if [Item Title] is 'Rubber Suit (Black)'
+                            if [Item Title] is 'The%20Leathers'
                         </td>
                     </tr>
                     <tr>
@@ -69,23 +81,35 @@
                         <td>GET</td>
                         <td>None</td>
                         <td>A json with info about one item in the NuMuseum like: <br>
-                            <code>{ <br>
-                                "objectID": "2230001", <br>
-                                "title": "Rubber Suit (Black)", <br>
-                                "artistDisplayName": "Anonymous", <br>
-                                "exhibit": "Contemporary Clothing", <br>
-                                "primaryImage": "NONE", <br>
-                                "additionalImages": "NONE", <br>
-                                "videoURL": "NONE", <br>
-                                "infoURL": "NONE", <br>
-                                "objectName": "Shirt/Pants", <br>
-                                "objectDate": "2022", <br>
-                                "medium": "Rubber", <br>
-                                "dimensions": "90 x 55", <br>
-                                "description": "This contemporary piece of artistic clothing is comprised of a shirt connected to pants. Its construction from an unconventional material (black rubber) increases its visual impact.", <br>
-                                "department": "3 Clothing", <br>
-                                "isPublicDomain": "FALSE", <br>
-                                "isFeatured": "TRUE" <br>
+                            <code>{<br>
+                                "_id": "63f1ad390f6f179c878ec20e",<br>
+                                "itemId": "2230001",<br>
+                                "title": "Rubber Suit (Black)",<br>
+                                "artist": {<br>
+                                "_id": "63f1997d0f6f179c878ec1a5",<br>
+                                "artistName": "Anonymous",<br>
+                                "artistBiography": "Anonymous artists/designers designed several items in the NuMuseum--most notably those in the clothing collection.",<br>
+                                "artistStart": "ND",<br>
+                                "artistMedium": [<br>
+                                "Multiple"<br>
+                                ]<br>
+                                },<br>
+                                "exhibit": "Contemporary Clothing",<br>
+                                "primaryImage": "https://delacorteclock.github.io/NuMuseumImages/2230001.png",<br>
+                                "links": [],<br>
+                                "objectName": "Poem",<br>
+                                "objectDate": "2022",<br>
+                                "medium": "Rubber",<br>
+                                "dimensions": [90, 55],<br>
+                                "description": "This contemporary piece of artistic clothing is comprised of a shirt connected to pants. Its construction from an unconventional nonporous material--black rubber--increases its visual appeal.",<br>
+                                "department": {<br>
+                                "_id": "63f19cff0f6f179c878ec1bd",<br>
+                                "deptTitle": "Clothing",<br>
+                                "deptDescription": "NuMuseum's Clothing Department (CD) maintains a physical collection of rare, artistic and notable articles of clothing. Articles in the collection include dresses, pants, shirts and skirts. Officials at the CD do their best to ensure that the often rare or unconventional materials from which the collection items are made are not dirtied, damaged or torn. All items are in a private collection and used by the museum founder when travelling. Items may exit the collection occasionally because of reasons including fitting the museum founder poorly or being banned (eg for toxic scents) because of popular vote by museum officials.",<br>
+                                "deptId": "3"<br>
+                                },<br>
+                                "isPublicDomain": false,<br>
+                                "isFeatured": true<br>
                                 }</code> <br>
                             if [Item ID] is '2230001'</td>
                     </tr>
@@ -102,10 +126,11 @@
                         <td>GET</td>
                         <td>None</td>
                         <td>A json with info about a specific department of the NuMuseum like: <br>
-                            <code>{ <br>
-                                "deptID": "3", <br>
-                                "deptTitle": "Clothing", <br>
-                                "deptDesc": "NuMuseum's Clothing Department (CD) maintains a physical collection of rare, artistic and notable articles of clothing. Articles in the collection include dresses, pants, shirts and skirts. Officials at the CD do their best to ensure that the often rare or unconventional materials from which the collection items are made are not dirtied, damaged or torn. All items are in a private collection and used by the museum founder when travelling. Items may exit the collection occasionally because of reasons including fitting the museum founder poorly or being banned (eg for toxic scents) because of popular vote by museum officials." <br>
+                            <code>{<br>
+                                "_id": "63f19cff0f6f179c878ec1bd",<br>
+                                "deptTitle": "Clothing",<br>
+                                "deptDescription": "NuMuseum's Clothing Department (CD) maintains a physical collection of rare, artistic and notable articles of clothing. Articles in the collection include dresses, pants, shirts and skirts. Officials at the CD do their best to ensure that the often rare or unconventional materials from which the collection items are made are not dirtied, damaged or torn. All items are in a private collection and used by the museum founder when travelling. Items may exit the collection occasionally because of reasons including fitting the museum founder poorly or being banned (eg for toxic scents) because of popular vote by museum officials.",<br>
+                                "deptId": "3"<br>
                                 }</code> <br>
                             if [Department ID] is '3'
                         </td>
@@ -123,13 +148,14 @@
                         <td>GET</td>
                         <td>None</td>
                         <td>A json with info about a specific artist of the NuMuseum like: <br>
-                            <code>{ <br>
-                                "artistName": "Standard PVC", <br>
-                                "artistBiography": "ADD DESC", <br>
-                                "artistStart": "2022", <br>
-                                "artistMedium": "Digital" <br>
+                            <code>{<br>
+                                "_id": "63f199dd0f6f179c878ec1a9", <br>
+                                "artistName": "Quik the Artist",<br>
+                                "artistBiography": "Quik the Artist is a duck who thinks and draws in a two dimensional way. Quik the Artist resides in the dome of a tall and historical hotel building.",<br>
+                                "artistStart": "2020",<br>
+                                "artistMedium": ["Painting", "Digital"]<br>
                                 }</code> <br>
-                            if [Artist Name] is 'Standard PVC'
+                            if [Artist Name] is 'Quik%20the%20Artist'
                         </td>
                     </tr>
                     <tr>
@@ -137,10 +163,10 @@
                         <td>/users</td>
                         <td>GET</td>
                         <td>None</td>
-                        <td>A json with info about each user with a NuMuseum account</td>
+                        <td>A json with info about each user with a NuMuseum account populated with info about the favourite items</td>
                     </tr>
                     <tr>
-                        <td>Get info about all users</td>
+                        <td>Get info about user based on username</td>
                         <td>/users/username/[User Username]</td>
                         <td>GET</td>
                         <td>None</td>
@@ -162,76 +188,82 @@
                         <td>Add new user information</td>
                         <td>/users</td>
                         <td>POST</td>
-                        <td>A json with forename, surname, username and code like: <br>
-                            <code>{ <br>
-                                "forename": "PVC", <br>
-                                "surname": "Duck", <br>
-                                "username": "TheDoric", <br>
-                                "code": "CorrectHorseBatteryStaple" <br>
-                                }</code>
+                        <td>A json with userForename, userSurname, userUsername, userCode, userEmail and optional userCelebrate like: <br>
+                            <code>{<br>
+                                "userForename": "Ignaceous",<br>
+                                "userSurname": "Duck",<br>
+                                "userUsername": "LittleSpaceSuit",<br>
+                                "userCode": "TheRubbersAreGreatPants",<br>
+                                "userEmail": "the@rubber.suit",<br>
+                                "userCelebrate": "1970-05-04T08:00:00.000Z"<br>
+                                }</code> <br>
+                            where userCelebrate is an optional date containing 1970 (for privacy) and the day/month (its purpose is to 'celebrate' users in the future if they choose to give the day/month)
                         </td>
-                        <td>A json with inputted info plus generated ID and generated blank favourite item array like: <br>
-                            <code>{ <br>
-                                "forename": "PVC", <br>
-                                "surname": "Duck", <br>
-                                "username": "TheDoric", <br>
-                                "code": "CorrectHorseBatteryStaple", <br>
-                                "id": "afea0944-91c7-4427-b998-2273cee943e4", <br>
-                                "favouriteItems": [] <br>
+                        <td>A json with inputted info plus generated _id and generated blank userFavourites array like: <br>
+                            <code>{<br>
+                                "userForename": "Ignaceous",<br>
+                                "userSurname": "Duck",<br>
+                                "userUsername": "LittleSpaceSuit",<br>
+                                "userCode": "TheRubbersAreGreatPants",<br>
+                                "userEmail": "the@rubber.suit",<br>
+                                "userCelebrate": "1970-05-04T08:00:00.000Z",<br>
+                                "userFavourites": [],<br>
+                                "_id": "63f2e9827bb1bec514521f82",<br>
                                 }</code> <br>
                             for the sample inputted json
                         </td>
                     </tr>
                     <tr>
-                        <td>Update user info based on ID</td>
-                        <td>/users/[User ID]</td>
+                        <td>Update user info based on username</td>
+                        <td>/users/username/[User Username]</td>
                         <td>PUT</td>
-                        <td>A json with updated forename, surname, username AND/OR code like: <br>
-                            <code>{"forename": "Nullem"}</code> <br>
+                        <td>A json with updated userForename, userSurname, userUsername, userCode, userEmail AND/OR optional userCelebrate like: <br>
+                            <code>{"userForename": "Nullem"}</code> <br>
                             or <br>
-                            <code>{"surname": "The Rabbit II", "code": "EquivalentBirdPlasticSilhouette"}</code>
+                            <code>{"userSurname": "Duck", "userCode": "EquivalentBirdLightbulbPen"}</code>
                         </td>
                         <td>A json with user info updated like: <br>
-                            <code>{ <br>
-                                "forename": "Nullem", <br>
-                                "surname": "Unhun", <br>
-                                "username": "ManySilhouettes", <br>
-                                "code": "IncorrectDuckCodeComputer", <br>
-                                "id": "351b72f9-4314-4809-bc0e-6b87a1ed41b4" <br>
+                            <code>{<br>
+                                "_id": "63f2cd7588f29bbf2c0efe21",<br>
+                                "userForename": "Ignaceous",<br>
+                                "userSurname": "Duck",<br>
+                                "userUsername": "LittleSpaceSuit",<br>
+                                "userCode": "EquivalentBirdLightbulbPen",<br>
+                                "userEmail": "the@rubber.suit",<br>
+                                "userCelebrate": "1970-05-04T08:00:00.000Z",<br>
+                                "userFavourites": []<br>
                                 }</code> <br>
-                            after the first sample request body 
+                            after the second sample request body if [User Username] is 'LittleSpaceSuit'
                         </td>
                     </tr>
                     <tr>
-                        <td>Delete user based on ID</td>
-                        <td>/users/[User ID]</td>
+                        <td>Delete user based on username</td>
+                        <td>/users/username/[User Username]</td>
                         <td>DELETE</td>
                         <td>None</td>
                         <td>A text message to indicate that the user got deleted successfully like: <br>
-                            <code>SUCCESS --> USER ID351b72f9-4314-4809-bc0e-6b87a1ed41b4 REMOVED</code> <br>
-                            if [User ID] is '351b72f9-4314-4809-bc0e-6b87a1ed41b4'
+                            <code>SUCCESS --> USER WITH USERNAME 'IMadeADuplicateTheLeathersVsTheGreysAccount' REMOVED</code> <br>
+                            if [User Username] is 'IMadeADuplicateTheLeathersVsTheGreysAccount'
                         </td>
                     </tr>
                     <tr>
-                        <td>Add item to array of favourite items</td>
-                        <td>/users/[User ID]/[Item ID]</td>
+                        <td>Add item to array of favourite items based on username and favourite item id</td>
+                        <td>/users/username/[User Username]/favitem/[Favourite Item ID]</td>
                         <td>POST</td>
                         <td>None</td>
                         <td>A text message to indicate that the user's favourite item array got updated like: <br>
-                            <code>SUCCESS --> Item ID2230011 titled 'The Leathers' is now part of Dulim Unhun's array of favourites. (User
-                                ID351b72f9-4314-4809-bc0e-6b87a1ed41b4)</code> <br>
-                            if [User ID] is '351b72f9-4314-4809-bc0e-6b87a1ed41b4' and [Item ID] is '2230011'
+                            <code>SUCCESS --> Item ID63f1ada30f6f179c878ec210 is now part of the favourite item array of user with username 'ILikeClothing'</code> <br>
+                            if [User Username] is 'ILikeClothing' and [Favourite Item ID] is '63f1ada30f6f179c878ec210'
                         </td>
                     </tr>
                     <tr>
-                        <td>Remove item from array of favourite items</td>
-                        <td>/users/[User ID]/[Item ID]<</td>
+                        <td>Remove item from array of favourite items based on username and favourite item id</td>
+                        <td>/users/username/[User Username]/favitem/[Favourite Item ID]</td>
                         <td>DELETE</td>
                         <td>None</td>
                         <td>A text message to indicate that an item got removed successfully from a user's favourite item array like: <br>
-                            <code>SUCCESS --> Item ID1250031 titled 'Lute No 2414' is no longer part of Minobbiane Rabitana's array of favourites. (User
-                                ID8e3652c8-6ca7-4f90-bf89-d174c2a19140)</code> <br>
-                            if [User ID] is '8e3652c8-6ca7-4f90-bf89-d174c2a19140' and [Item ID] is '1250031'
+                            <code>SUCCESS --> Item ID63f1a1990f6f179c878ec1cb is no longer part of the favourite item array of user with username 'NewPlasticDress'</code> <br>
+                            if [User Username] is 'NewPlasticDress' and [Favourite Item ID] is '63f1a1990f6f179c878ec1cb'
                         </td>
                     </tr>
                 </tbody>

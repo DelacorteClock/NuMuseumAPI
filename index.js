@@ -234,7 +234,7 @@ app.post('/users/username/:username/favitem/:favitemid', function (req, res) {
                     res.status(500).send('FAILURE --> ' + err);
                 } else {
                     //res.json(updatedInfo);
-                    res.status(200).send(`SUCCESS --> Item ID${favitemid} is now part of the favourite item array of user with username '${username}'.`);
+                    res.status(200).send(`SUCCESS --> Item ID${favitemid} is now part of the favourite item array of user with username '${username}'`);
                 }
             });
         } else {
@@ -257,7 +257,7 @@ app.delete('/users/username/:username/favitem/:favitemid', function (req, res) {
                     res.status(500).send('FAILURE --> ' + err);
                 } else {
                     //res.json(updatedInfo);
-                    res.status(200).send(`SUCCESS --> Item ID${favitemid} is no longer part of the favourite item array of user with username '${username}'.`);
+                    res.status(200).send(`SUCCESS --> Item ID${favitemid} is no longer part of the favourite item array of user with username '${username}'`);
                 }
             });
         } else {
