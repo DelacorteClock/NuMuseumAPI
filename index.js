@@ -52,7 +52,7 @@ app.get('/collection/title/:title', function (req, res) {
         } else if (item) {
             res.status(200).json(item);
         } else {
-            res.status(400).send(`FAILURE --> ITEM '${title}' NOT IN NUMUSEUM`);
+            res.status(400).send(`FAILURE --> ITEM \u00AB${title}\u00BB NOT IN NUMUSEUM`);
         }
     });
 });
@@ -114,7 +114,7 @@ app.get('/artists/name/:name', function (req, res) {
         if (artist) {
             res.status(200).json(artist);
         } else {
-            res.status(400).send(`FAILURE --> ARTIST '${name}' NOT IN NUMUSEUM`);
+            res.status(400).send(`FAILURE --> ARTIST \u00AB${name}\u00BB NOT IN NUMUSEUM`);
         }
     }).catch(function (err) {
         console.error(err);
@@ -144,7 +144,7 @@ app.get('/users/username/:username', function (req, res) {
         } else if (user) {
             res.status(200).json(user);
         } else {
-            res.status(400).send(`FAILURE --> USER '${username}' NOT IN NUMUSEUM`);
+            res.status(400).send(`FAILURE --> USER \u00AB${username}\u00BB NOT IN NUMUSEUM`);
         }
     });
 });
@@ -154,7 +154,7 @@ app.post('/users', function (req, res) {
     const info = req.body;
     Users.findOne({userUsername: info.userUsername}).then(function (user) {
         if (user) {
-            res.status(400).send(`FAILURE --> USER '${info.userUsername}' ALREADY CREATED`);
+            res.status(400).send(`FAILURE --> USER \u00AB${info.userUsername}\u00BB ALREADY CREATED`);
         } else {
             Users.create({
                 userForename: info.userForename,
@@ -200,7 +200,7 @@ app.put('/users/username/:username', function (req, res) {
                 }
             });
         } else {
-            res.status(400).send(`FAILURE --> NO USER WITH USERNAME '${username}'`);
+            res.status(400).send(`FAILURE --> NO USER WITH USERNAME \u00AB${username}\u00BB`);
         }
     }).catch(function (err) {
         console.error(err);
@@ -213,9 +213,9 @@ app.delete('/users/username/:username', function (req, res) {
     username = req.params.username;
     Users.findOneAndRemove({userUsername: username}).then(function (user) {
         if (user) {
-            res.status(200).send(`SUCCESS --> USER WITH USERNAME '${username}' REMOVED`);
+            res.status(200).send(`SUCCESS --> USER WITH USERNAME \u00AB${username}\u00BB REMOVED`);
         } else {
-            res.status(400).send(`FAILURE --> NO USER WITH USERNAME '${username}' FOUND`);
+            res.status(400).send(`FAILURE --> NO USER WITH USERNAME \u00AB${username}\u00BB FOUND`);
         }
     }).catch(function (err) {
         console.error(err);
@@ -234,11 +234,11 @@ app.post('/users/username/:username/favitem/:favitemid', function (req, res) {
                     res.status(500).send('FAILURE --> ' + err);
                 } else {
                     //res.json(updatedInfo);
-                    res.status(200).send(`SUCCESS --> Item ID${favitemid} is now part of the favourite item array of user with username '${username}'`);
+                    res.status(200).send(`SUCCESS --> Item ID${favitemid} is now part of the favourite item array of user with username \u00AB${username}\u00BB`);
                 }
             });
         } else {
-            res.status(400).send(`FAILURE --> NO USER WITH USERNAME '${username}'`);
+            res.status(400).send(`FAILURE --> NO USER WITH USERNAME \u00AB${username}\u00BB`);
         }
     }).catch(function (err) {
         console.error(err);
@@ -257,11 +257,11 @@ app.delete('/users/username/:username/favitem/:favitemid', function (req, res) {
                     res.status(500).send('FAILURE --> ' + err);
                 } else {
                     //res.json(updatedInfo);
-                    res.status(200).send(`SUCCESS --> Item ID${favitemid} is no longer part of the favourite item array of user with username '${username}'`);
+                    res.status(200).send(`SUCCESS --> Item ID${favitemid} is no longer part of the favourite item array of user with username \u00AB${username}\u00BB`);
                 }
             });
         } else {
-            res.status(400).send(`FAILURE --> NO USER WITH USERNAME '${username}'`);
+            res.status(400).send(`FAILURE --> NO USER WITH USERNAME \u00AB${username}\u00BB`);
         }
     }).catch(function (err) {
         console.error(err);
