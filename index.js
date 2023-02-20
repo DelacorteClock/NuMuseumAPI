@@ -204,62 +204,22 @@ app.put('/users/username/:username', function (req, res) {
     });
 });
 
-//Put user update by id
-app.put('/1111users/:id', function (req, res) {
-    const id = req.params.id;
-    const editedInfo = req.body;
-
-    var userInfo = appUsers.find(function (user) {
-        return user.id === id;
-    });
-
-    if (userInfo) {
-        //Count if any pieces of info were updated
-        count = 0;
-        //Check what updateable pieces of information got updated
-        if (editedInfo.forename) {
-            userInfo.forename = editedInfo.forename;
-            count++;
-        }
-        if (editedInfo.surname) {
-            userInfo.surname = editedInfo.surname;
-            count++;
-        }
-        if (editedInfo.username) {
-            userInfo.username = editedInfo.username;
-            count++;
-        }
-        if (editedInfo.code) {
-            userInfo.code = editedInfo.code;
-            count++;
-        }
-        if (count) {
-            res.status(200).json(userInfo);
+//Delete user based on username
+app.delete('/users/username/:username', function (req, res) {
+    username = req.params.username;
+    Users.findOneAndRemove({userUsername: username}).then(function (user) {
+        if (user) {
+            res.status(200).send(`SUCCESS --> USER WITH USERNAME '${username}' REMOVED`);
         } else {
-            res.status(400).send(`FAILURE --> NO INFORMATION UPDATED FOR EXISTING USER ${id}`);
+            res.status(400).send(`FAILURE --> NO USER WITH USERNAME '${username}' FOUND`);
         }
-    } else {
-        res.status(400).send(`FAILURE --> NO USER WITH ID ${id}`);
-    }
-});
-
-//Delete user based on id
-app.delete('/users/:id', function (req, res) {
-    const id = req.params.id;
-
-    var userInfo = appUsers.find(function (user) {
-        return user.id === id;
+    }).catch(function (err) {
+        console.error(err);
+        res.status(500).send('FAILURE --> ' + err);
     });
-
-    if (userInfo) {
-        appUsers = appUsers.filter(function (user) {
-            return user.id !== id;
-        });
-        res.status(200).send(`SUCCESS --> USER ID${id} REMOVED`);
-    } else {
-        res.status(400).send(`FAILURE --> NO USER WITH ID${id}`);
-    }
 });
+
+
 
 //Post favourite item based on user ID and object ID
 app.post('/users/:id/:objectID', function (req, res) {
