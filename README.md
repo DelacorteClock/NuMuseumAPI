@@ -11,3 +11,8 @@ Download the zip of the repository and extract all files in your computer to use
 ### Generate node_modules
 
 To generate node_modules run `npm instal`
+
+### Documentation File
+
+Open documentation.html in public to view the information in this gif image more easily.
+![DocumentationVideo](https://user-images.githubusercontent.com/123141973/220024610-b09c9f24-fd34-4f3e-8e22-1873edc6651e.gif)
