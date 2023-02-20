@@ -32,41 +32,43 @@ app.get('/', function (req, res) {
 
 //Get info about all items in collection
 app.get('/collection', function (req, res) {
-    Items.find().then(function (items) {
-        res.status(200).json(items);
-    }).catch(function (err) {
-        console.error(err);
-        res.status(500).send('FAILURE --> ' + err);
+    Items.find().populate('artist').populate('department').exec(function (err, items) {
+        if (err) {
+            console.error(err);
+            res.status(500).send('FAILURE --> ' + err);
+        } else {
+            res.status(200).json(items);
+        }
     });
 });
 
 //Get info about item with specific title
 app.get('/collection/title/:title', function (req, res) {
     const title = req.params.title;
-    Items.findOne({title: title}).then(function (item) {
-        if (item) {
+    Items.findOne({title: title}).populate('artist').populate('department').exec(function (err, item) {
+        if (err) {
+            console.error(err);
+            res.status(500).send('FAILURE --> ' + err);
+        } else if (item) {
             res.status(200).json(item);
         } else {
             res.status(400).send(`FAILURE --> ITEM '${title}' NOT IN NUMUSEUM`);
         }
-    }).catch(function (err) {
-        console.error(err);
-        res.status(500).send('FAILURE --> ' + err);
     });
 });
 
-//Get info about item with specific id
+//Get info about item with specific title
 app.get('/collection/id/:id', function (req, res) {
     const id = req.params.id;
-    Items.findOne({itemId: id}).then(function (item) {
-        if (item) {
+    Items.findOne({itemId: id}).populate('artist').populate('department').exec(function (err, item) {
+        if (err) {
+            console.error(err);
+            res.status(500).send('FAILURE --> ' + err);
+        } else if (item) {
             res.status(200).json(item);
         } else {
             res.status(400).send(`FAILURE --> ITEM ID${id} NOT IN NUMUSEUM`);
         }
-    }).catch(function (err) {
-        console.error(err);
-        res.status(500).send('FAILURE --> ' + err);
     });
 });
 
@@ -122,26 +124,28 @@ app.get('/artists/name/:name', function (req, res) {
 
 //NEW --> Get info about all users
 app.get('/users', function (req, res) {
-    Users.find().then(function (users) {
-        res.status(200).json(users);
-    }).catch(function (err) {
-        console.error(err);
-        res.status(500).send('FAILURE --> ' + err);
+    Users.find().populate('userFavourites').exec(function (err, users) {
+        if (err) {
+            console.error(err);
+            res.status(500).send('FAILURE --> ' + err);
+        } else {
+            res.status(200).json(users);
+        }
     });
 });
 
 //NEW --> Get info about user based on username
 app.get('/users/username/:username', function (req, res) {
     username = req.params.username;
-    Users.findOne({userUsername: username}).then(function (user) {
-        if (user) {
+    Users.findOne({userUsername: username}).populate('userFavourites').exec(function (err, user) {
+        if (err) {
+            console.error(err);
+            res.status(500).send('FAILURE --> ' + err);
+        } else if (user) {
             res.status(200).json(user);
         } else {
             res.status(400).send(`FAILURE --> USER '${username}' NOT IN NUMUSEUM`);
         }
-    }).catch(function (err) {
-        console.error(err);
-        res.status(500).send('FAILURE --> ' + err);
     });
 });
 
@@ -159,7 +163,7 @@ app.post('/users', function (req, res) {
                 userCode: info.userCode,
                 userEmail: info.userEmail,
                 userCelebrate: info.userCelebrate,
-                userFavourites: info.userFavourites
+                userFavourites: []
             }).then(function (newuser) {
                 res.status(201).json(newuser);
             }).catch(function (err) {
@@ -187,7 +191,7 @@ app.put('/users/username/:username', function (req, res) {
                     userEmail: newInfo.userEmail,
                     userCelebrate: newInfo.userCelebrate
                 }
-            }, {new: true}, function (err, updatedInfo) {
+            }, {new : true}, function (err, updatedInfo) {
                 if (err) {
                     console.error(err);
                     res.status(500).send('FAILURE --> ' + err);
@@ -219,31 +223,27 @@ app.delete('/users/username/:username', function (req, res) {
     });
 });
 
-
-
-//Post favourite item based on user ID and object ID
-app.post('/users/:id/:objectID', function (req, res) {
-    const {id, objectID} = req.params;
-
-    var userInfo = appUsers.find(function (user) {
-        return user.id === id;
+//Post favourite item based on username and item's unique id
+app.post('/users/username/:username/favitem/:favitemid', function (req, res) {
+    const {username, favitemid} = req.params;
+    Users.findOne({userUsername: username}).then(function (user) {
+        if (user) {
+            Users.findOneAndUpdate({userUsername: username}, {$addToSet: {userFavourites: favitemid}}, {new : true}, function (err, updatedInfo) {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send('FAILURE --> ' + err);
+                } else {
+                    res.json(updatedInfo);
+                    //res.status(200).send(`SUCCESS --> Item ID${favitemid} is now part of the favourite item array of `);
+                }
+            });
+        } else {
+            res.status(400).send(`FAILURE --> NO USER WITH USERNAME '${username}'`);
+        }
+    }).catch(function (err) {
+        console.error(err);
+        res.status(500).send('FAILURE --> ' + err);
     });
-
-    const item = museumItems.find(function (item) {
-        return item.objectID === objectID;
-    });
-
-    //Info about success and different failure types 
-    if (userInfo && item) {
-        userInfo.favouriteItems.push(objectID);
-        res.status(200).send(`SUCCESS --> Item ID${objectID} titled '${item.title}' is now part of ${userInfo.forename} ${userInfo.surname}'s array of favourites. (User ID${id})`);
-    } else if (userInfo && !item) {
-        res.status(400).send(`FAILURE --> ITEM ID${objectID} DOES NOT EXIST : EXISTING USER ${userInfo.forename} ${userInfo.surname}'S ARRAY OF FAVOURITES NOT UPDATED (USER ID ${id})`);
-    } else if (!userInfo && item) {
-        res.status(400).send(`FAILURE --> USER ID${id} DOES NOT EXIST : EXISTING ITEM ID${objectID} TITLED '${item.title}' NOT ADDED TO ARRAY OF FAVOURITES`);
-    } else {
-        res.status(400).send(`FAILURE --> USER ID${id} DOES NOT EXIST AND ITEM ID${objectID} DOES NOT EXIST`);
-    }
 });
 
 //Delete favourite item based on user ID and object ID
