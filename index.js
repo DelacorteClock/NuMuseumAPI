@@ -44,11 +44,11 @@ app.get('/collection', function (req, res) {
 app.get('/collection/title/:title', function (req, res) {
     const title = req.params.title;
     Items.findOne({title: title}).then(function (item) {
-       if (item) {
-           res.status(200).json(item);
-       } else {
-           res.status(400).send(`FAILURE --> ITEM '${title}' NOT IN NUMUSEUM`);
-       }
+        if (item) {
+            res.status(200).json(item);
+        } else {
+            res.status(400).send(`FAILURE --> ITEM '${title}' NOT IN NUMUSEUM`);
+        }
     }).catch(function (err) {
         console.error(err);
         res.status(500).send('FAILURE --> ' + err);
@@ -121,7 +121,7 @@ app.get('/artists/name/:name', function (req, res) {
 });
 
 //NEW --> Get info about all users
-app.get('/users', function(req, res) {
+app.get('/users', function (req, res) {
     Users.find().then(function (users) {
         res.status(200).json(users);
     }).catch(function (err) {
@@ -145,10 +145,36 @@ app.get('/users/username/:username', function (req, res) {
     });
 });
 
-//Post new user info
 app.post('/users', function (req, res) {
-    const userInfo = req.body;
+    const info = req.body;
+    Users.findOne({userUsername: info.userUsername}).then(function (user) {
+        if (user) {
+            res.status(400).send(`FAILURE --> USER '${info.userUsername}' ALREADY CREATED`);
+        } else {
+            Users.create({
+                userForename: info.userForename,
+                userSurname: info.userSurname,
+                userUsername: info.userUsername,
+                userCode: info.userCode,
+                userEmail: info.userEmail,
+                userCelebrate: info.userCelebrate,
+                userFavourites: info.userFavourites
+            }).then(function (newuser) {
+                res.status(201).json(newuser);
+            }).catch(function (err) {
+                console.error(err);
+                res.status(500).send('FAILURE --> ' + err);
+            });
+        }
+    }).catch(function (err) {
+        console.error(err);
+        res.status(500).send('FAILURE --> ' + err);
+    });
+});
 
+//Post new user info
+app.post('/1111users', function (req, res) {
+    const userInfo = req.body;
     if (userInfo.forename) {
         if (userInfo.surname) {
             //Login info--maybe add email, telephone etc later
@@ -210,11 +236,11 @@ app.put('/users/:id', function (req, res) {
 //Delete user based on id
 app.delete('/users/:id', function (req, res) {
     const id = req.params.id;
-    
+
     var userInfo = appUsers.find(function (user) {
-       return user.id === id;
+        return user.id === id;
     });
-    
+
     if (userInfo) {
         appUsers = appUsers.filter(function (user) {
             return user.id !== id;
@@ -228,15 +254,15 @@ app.delete('/users/:id', function (req, res) {
 //Post favourite item based on user ID and object ID
 app.post('/users/:id/:objectID', function (req, res) {
     const {id, objectID} = req.params;
-    
+
     var userInfo = appUsers.find(function (user) {
         return user.id === id;
     });
-    
+
     const item = museumItems.find(function (item) {
         return item.objectID === objectID;
     });
-    
+
     //Info about success and different failure types 
     if (userInfo && item) {
         userInfo.favouriteItems.push(objectID);
@@ -253,15 +279,15 @@ app.post('/users/:id/:objectID', function (req, res) {
 //Delete favourite item based on user ID and object ID
 app.delete('/users/:id/:objectID', function (req, res) {
     const {id, objectID} = req.params;
-    
+
     var userInfo = appUsers.find(function (user) {
         return user.id === id;
     });
-    
+
     const item = museumItems.find(function (item) {
         return item.objectID === objectID;
     });
-    
+
     //Info about success and different failure types 
     if (userInfo && item) {
         userInfo.favouriteItems = userInfo.favouriteItems.filter(function (idNum) {
