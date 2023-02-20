@@ -133,6 +133,32 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>Get info about all users</td>
+                        <td>/users</td>
+                        <td>GET</td>
+                        <td>None</td>
+                        <td>A json with info about each user with a NuMuseum account</td>
+                    </tr>
+                    <tr>
+                        <td>Get info about all users</td>
+                        <td>/users/username/[User Username]</td>
+                        <td>GET</td>
+                        <td>None</td>
+                        <td>A json with info about a specific artist of the NuMuseum like: <br>
+                            <code>{ <br>
+                                "_id": "63f1b49eec7f3a208556d48d", <br>
+                                "userForename": "Umboose", <br>
+                                "userSurname": "Nookwanfei", <br>
+                                "userUsername": "TheLeathersVsTheGreys", <br>
+                                "userCode": "QWERTZ123456", <br>
+                                "userEmail": "cotton@is.plain", <br>
+                                "userCelebrate": "1970-12-04T00:00:00.000Z", <br>
+                                "userFavourites": ["63f1ada30f6f179c878ec210"] <br>
+                                }</code> <br>
+                            if [User Username] is 'TheLeathersVsTheGreys'
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Add new user information</td>
                         <td>/users</td>
                         <td>POST</td>
