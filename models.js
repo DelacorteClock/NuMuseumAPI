@@ -8,6 +8,7 @@ var artistSchema = mongoose.Schema({
 });
 
 var departmentSchema = mongoose.Schema({
+    deptId: {type: String, required: true},
     deptTitle: {type: String, required: true},
     deptDescription: {type: String, required: true}
 });
