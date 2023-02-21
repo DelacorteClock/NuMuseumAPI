@@ -8,10 +8,10 @@ JWTStrategy = passportJWT.Strategy,
 ExtractJWT = passportJWT.ExtractJwt;
 
 passport.use(new LocalStrategy({
-    usernameField: 'userUsername',
-    passwordField: 'userCode'
-}, function (username, password, callback) {
-    console.log(`Username \u00AB${username}\u00BB Code \u00AB${password}\u00BB`);
+    usernameField: 'username',
+    passwordField: 'code'
+}, function (username, code, callback) {
+    console.log(`Username \u00AB${username}\u00BB Code \u00AB${code}\u00BB`);
     Users.findOne({userUsername: username}, function (error, user) {
         if (error) {
             console.log(`ERROR ERROR ---> ${error}`);
@@ -19,7 +19,11 @@ passport.use(new LocalStrategy({
         }
         if (!user) {
             console.log(`ERROR ERROR ---> USERNAME \u00AB${username}\u00AB NOT IN NUMUSEUM DATABASE`);
-            return callback(null, false, {message: 'FAILURE --> USERNAME AND/OR PASSWORD NOT CORRECT'});
+            return callback(null, false, {message: 'FAILURE --> USERNAME NOT CORRECT'});
+        }
+        if (!user.validateCode(code)) {
+            console.log(`ERROR ERROR ---> CODE NOT IN NUMUSEUM DATABASE`);
+            return callback(null, false, {message: 'FAILURE --> CODE NOT CORRECT'});
         }
         console.log('FINISH');
         return callback(null, user);

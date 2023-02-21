@@ -162,6 +162,7 @@ app.get('/users/username/:username', passport.authenticate('jwt', {session: fals
 //Post new user
 app.post('/users', passport.authenticate('jwt', {session: false}), function (req, res) {
     const info = req.body;
+    var nuCode = Users.mixCode(info.userCode);
     Users.findOne({userUsername: info.userUsername}).then(function (user) {
         if (user) {
             res.status(400).send(`FAILURE --> USER \u00AB${info.userUsername}\u00BB ALREADY CREATED`);
@@ -170,7 +171,7 @@ app.post('/users', passport.authenticate('jwt', {session: false}), function (req
                 userForename: info.userForename,
                 userSurname: info.userSurname,
                 userUsername: info.userUsername,
-                userCode: info.userCode,
+                userCode: nuCode,
                 userEmail: info.userEmail,
                 userCelebrate: info.userCelebrate,
                 userFavourites: []

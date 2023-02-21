@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 var artistSchema = mongoose.Schema({
     artistName: {type: String, required: true},
@@ -22,6 +23,14 @@ var userSchema = mongoose.Schema({
     userCelebrate: Date,
     userFavourites: [{type: mongoose.Schema.Types.ObjectId, ref: 'Item'}]
 },{versionKey: false});
+
+userSchema.statics.mixCode = function (code) {
+    return bcrypt.hashSync(code, 10);
+};
+
+userSchema.methods.validateCode = function (code) {
+    return bcrypt.compareSync(code, this.userCode);
+};
 
 var itemSchema = mongoose.Schema({
     itemId: {type: String, required: true},
