@@ -4,7 +4,8 @@
   "description": "The NuMuseum API will return information about the items in the NuMuseum virtual collection. This information will include descriptions, types (eg sculpture, architecture, painting etc), mediums, dimensions, artists and more. It will also return information about the artists, types and potentially more. The API will enable user registration, user-generated lists of favourite works and deleting accounts.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+	"dev":"nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.9.2",
     "morgan": "^1.10.0",
+    "nodemon": "^2.0.20",
     "npm": "^9.4.2",
     "nvm": "^0.0.4",
     "passport": "^0.6.0",
