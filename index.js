@@ -50,7 +50,7 @@ app.get('/collection', passport.authenticate('jwt', {session: false}), function 
 });
 
 //Get info about item with specific title
-app.get('/collection/title/:title', function (req, res) {
+app.get('/collection/title/:title', passport.authenticate('jwt', {session: false}), function (req, res) {
     const title = req.params.title;
     Items.findOne({title: title}).populate('artist').populate('department').exec(function (err, item) {
         if (err) {
@@ -65,7 +65,7 @@ app.get('/collection/title/:title', function (req, res) {
 });
 
 //Get info about item with specific title
-app.get('/collection/id/:id', function (req, res) {
+app.get('/collection/id/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
     const id = req.params.id;
     Items.findOne({itemId: id}).populate('artist').populate('department').exec(function (err, item) {
         if (err) {
@@ -80,7 +80,7 @@ app.get('/collection/id/:id', function (req, res) {
 });
 
 //Get info about all departments
-app.get('/departments', function (req, res) {
+app.get('/departments', passport.authenticate('jwt', {session: false}), function (req, res) {
     Departments.find().then(function (departments) {
         res.status(200).json(departments);
     }).catch(function (err) {
@@ -90,7 +90,7 @@ app.get('/departments', function (req, res) {
 });
 
 //Get info about department based on id
-app.get('/departments/id/:id', function (req, res) {
+app.get('/departments/id/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
     const id = req.params.id;
     Departments.findOne({deptId: id}).then(function (department) {
         if (department) {
@@ -105,7 +105,7 @@ app.get('/departments/id/:id', function (req, res) {
 });
 
 //Get info about all artists
-app.get('/artists', function (req, res) {
+app.get('/artists', passport.authenticate('jwt', {session: false}), function (req, res) {
     Artists.find().then(function (artists) {
         res.status(200).json(artists);
     }).catch(function (err) {
@@ -115,7 +115,7 @@ app.get('/artists', function (req, res) {
 });
 
 //Get info about artist based on specific name
-app.get('/artists/name/:name', function (req, res) {
+app.get('/artists/name/:name', passport.authenticate('jwt', {session: false}), function (req, res) {
     const name = req.params.name;
     Artists.findOne({artistName: name}).then(function (artist) {
         if (artist) {
@@ -130,7 +130,7 @@ app.get('/artists/name/:name', function (req, res) {
 });
 
 //NEW --> Get info about all users
-app.get('/users', function (req, res) {
+app.get('/users', passport.authenticate('jwt', {session: false}), function (req, res) {
     Users.find().populate('userFavourites').exec(function (err, users) {
         if (err) {
             console.error(err);
@@ -142,7 +142,7 @@ app.get('/users', function (req, res) {
 });
 
 //NEW --> Get info about user based on username
-app.get('/users/username/:username', function (req, res) {
+app.get('/users/username/:username', passport.authenticate('jwt', {session: false}), function (req, res) {
     username = req.params.username;
     Users.findOne({userUsername: username}).populate('userFavourites').exec(function (err, user) {
         if (err) {
@@ -157,7 +157,7 @@ app.get('/users/username/:username', function (req, res) {
 });
 
 //Post new user
-app.post('/users', function (req, res) {
+app.post('/users', passport.authenticate('jwt', {session: false}), function (req, res) {
     const info = req.body;
     Users.findOne({userUsername: info.userUsername}).then(function (user) {
         if (user) {
@@ -185,7 +185,7 @@ app.post('/users', function (req, res) {
 });
 
 //Put user update based on username and req body
-app.put('/users/username/:username', function (req, res) {
+app.put('/users/username/:username', passport.authenticate('jwt', {session: false}), function (req, res) {
     username = req.params.username;
     newInfo = req.body;
     Users.findOne({userUsername: username}).then(function (user) {
@@ -216,7 +216,7 @@ app.put('/users/username/:username', function (req, res) {
 });
 
 //Delete user based on username
-app.delete('/users/username/:username', function (req, res) {
+app.delete('/users/username/:username', passport.authenticate('jwt', {session: false}), function (req, res) {
     username = req.params.username;
     Users.findOneAndRemove({userUsername: username}).then(function (user) {
         if (user) {
@@ -231,7 +231,7 @@ app.delete('/users/username/:username', function (req, res) {
 });
 
 //Post favourite item based on username and item's unique id
-app.post('/users/username/:username/favitem/:favitemid', function (req, res) {
+app.post('/users/username/:username/favitem/:favitemid', passport.authenticate('jwt', {session: false}), function (req, res) {
     const {username, favitemid} = req.params;
     Users.findOne({userUsername: username}).then(function (user) {
         if (user) {
@@ -254,7 +254,7 @@ app.post('/users/username/:username/favitem/:favitemid', function (req, res) {
 });
 
 //Delete favourite item based on username and item's unique id
-app.delete('/users/username/:username/favitem/:favitemid', function (req, res) {
+app.delete('/users/username/:username/favitem/:favitemid', passport.authenticate('jwt', {session: false}), function (req, res) {
     const {username, favitemid} = req.params;
     Users.findOne({userUsername: username}).then(function (user) {
         if (user) {
@@ -278,4 +278,4 @@ app.delete('/users/username/:username/favitem/:favitemid', function (req, res) {
 
 app.listen(1618, function () {
     console.log('APPLICATION ACTIVE ---> LISTENING @ PORT 1618');
-});
+}); 
