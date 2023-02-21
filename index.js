@@ -19,6 +19,13 @@ app.use(express.static('public'));
 //For body parser
 app.use(bodyParser.json());
 
+//Require auth
+var auth = require('./auth')(app);
+
+//Require passport and import passport.js
+const passport = require('passport');
+require('./passport');
+
 //Generic error notification 
 app.use((err, req, res, next) => {
     console.error(err.stack);
@@ -31,7 +38,7 @@ app.get('/', function (req, res) {
 });
 
 //Get info about all items in collection
-app.get('/collection', function (req, res) {
+app.get('/collection', passport.authenticate('jwt', {session: false}), function (req, res) {
     Items.find().populate('artist').populate('department').exec(function (err, items) {
         if (err) {
             console.error(err);
