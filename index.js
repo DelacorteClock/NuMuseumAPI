@@ -19,6 +19,9 @@ app.use(express.static('public'));
 //For body parser
 app.use(bodyParser.json());
 
+const cors = require('cors');
+app.use(cors());
+
 //Require auth
 var auth = require('./auth')(app);
 
