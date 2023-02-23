@@ -173,7 +173,7 @@ app.post('/users', [
 ], function (req, res) {
     var fails = validationResult(req);
     if (!fails.isEmpty()) {
-        return res.status(422).json({FAILURES : fails.array()});
+        return res.status(422).json({FAILURES: fails.array()});
     }
     const info = req.body;
     var nuCode = Users.mixCode(info.userCode);
@@ -216,17 +216,17 @@ app.put('/users/username/:username', passport.authenticate('jwt', {session: fals
 ], function (req, res) {
     var fails = validationResult(req);
     if (!fails.isEmpty()) {
-        return res.status(422).json({FAILURES : fails.array()});
+        return res.status(422).json({FAILURES: fails.array()});
     }
-    
+
     const username = req.params.username;
     const newInfo = req.body;
-    
+
     //Hashing for new code if it is in the req body
     if (newInfo.userCode) {
-    var nuCode = Users.mixCode(newInfo.userCode);
+        var nuCode = Users.mixCode(newInfo.userCode);
     }
-    
+
     Users.findOne({userUsername: username}).then(function (user) {
         if (user) {
             Users.findOneAndUpdate({userUsername: username}, {$set: {
@@ -315,6 +315,9 @@ app.delete('/users/username/:username/favitem/:favitemid', passport.authenticate
     });
 });
 
-app.listen(1618, function () {
-    console.log('APPLICATION ACTIVE ---> LISTENING @ PORT 1618');
-}); 
+/* global process */
+const port = process.env.PORT || 1618;
+app.listen(port, '0.0.0.0', () => {
+    console.log('THIS IS NUMUSEUM PUBLIC VERSION 1 \u00ABRubberPants\u00BB WORKING ON ' + port);
+});
+
