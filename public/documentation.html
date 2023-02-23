@@ -30,6 +30,30 @@
                 </thead>
                 <tbody>
                     <tr>
+                        <td>Login to receive token in response</td>
+                        <td>/login?username=[User Username]?code=[User Code]</td>
+                        <td>POST</td>
+                        <td>None</td>
+                        <td>A json with user info and the token like:
+                            <code>{ <br>
+                                "user": {<br>
+                                "_id": "63f7d110777b79a2d1bca24b",<br>
+                                "userForename": "Ignaceous",<br>
+                                "userSurname": "Duck",<br>
+                                "userUsername": "LittleSpaceSuit",<br>
+                                "userCode": "$2b$10$0NjM8U/PVi9kK0Q1ozu3WebOurv3MlmEUcAwhSIjPgH.rhm44/8Na",<br>
+                                "userEmail": "iamunique@dulim.rubber",<br>
+                                "userCelebrate": "1970-05-04T08:00:00.000Z",<br>
+                                "userFavourites": [<br>
+                                "63f1ae250f6f179c878ec212"<br>
+                                ]<br>
+                                },<br>
+                                "token": "eyJhbGcizI1NiIsInR5cCOiJIUI6IkpXVCJ9.eyJc2VyU3iLCJ1c2VVybmFtZSI6IkyRm9R1jZVN1aXQyQ29kZSI6IiQyYiQxMCQwTmpY2siLCJ1c2VQiOiI2M2Y3ZDEx1c2VyZW5MDc3N2I3OWEyZyVXNlcm5hbWUiOiJMafaWDFiY2EyNGIiLCJhbWUiOiJJZ25hY2VvdXMiLCJ1XR0bGVTcGFNOFUvUFZpOWtLMFExb3p1M1dlYk91cnYzTkdWxpbS5ydWJiZXIiLCJ1c2WxtRVVjQXdoU0lqUGdILnJobTQ0LzhOYSIsInVzZXJFbWFpbCI6ImlhbXVuaXF1ZUBVyQ2VsZWJyYXRlIjoiMTk3MC0wdCI6MTY3NzE4ODgwMywiZXhwIjoxNjc3NzkzNjAzLCJzdWIiOiJMaXR0bGVTcGFjZVN1aXQifQ.kbv28SX7ANT10xNS0wNFQwODowMDowMC4wMDBaIiwidXNlckZhdm91cml0ZXMiOlsiNjNmMWFlMjUwZjZmMTc5Yzg3OGVjMjEyIl0sImlhX-7keZByRudCsTym2CMfsHEe7M-3E" <br>
+                                }</code> <br>
+                                if [User Username] is 'LittleSpaceSuit' and [User Code] is the corresponding userCode (before hashing)
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Get info about all items in NuMuseum</td>
                         <td>/collection</td>
                         <td>GET</td>
@@ -176,7 +200,7 @@
                                 "userForename": "Umboose", <br>
                                 "userSurname": "Nookwanfei", <br>
                                 "userUsername": "TheLeathersVsTheGreys", <br>
-                                "userCode": "QWERTZ123456", <br>
+                                "userCode": "HASHEDCODE", <br>
                                 "userEmail": "cotton@is.plain", <br>
                                 "userCelebrate": "1970-12-04T00:00:00.000Z", <br>
                                 "userFavourites": ["63f1ada30f6f179c878ec210"] <br>
@@ -247,7 +271,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Add item to array of favourite items based on username and favourite item id</td>
+                        <td>Add item to array of favourite items based on username and (long) favourite item id</td>
                         <td>/users/username/[User Username]/favitem/[Favourite Item ID]</td>
                         <td>POST</td>
                         <td>None</td>
@@ -257,7 +281,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Remove item from array of favourite items based on username and favourite item id</td>
+                        <td>Remove item from array of favourite items based on username and (long) favourite item id</td>
                         <td>/users/username/[User Username]/favitem/[Favourite Item ID]</td>
                         <td>DELETE</td>
                         <td>None</td>
