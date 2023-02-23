@@ -1,5 +1,6 @@
 //Key tools
 const express = require('express'), app = express(), morgan = require('morgan'), bodyParser = require('body-parser'), uuid = require('uuid');
+const {check, validationResult} = require('express-validator');
 
 //Integration of mongoose
 const mongoose = require('mongoose');
@@ -146,7 +147,7 @@ app.get('/users', passport.authenticate('jwt', {session: false}), function (req,
 
 //NEW --> Get info about user based on username
 app.get('/users/username/:username', passport.authenticate('jwt', {session: false}), function (req, res) {
-    username = req.params.username;
+    const username = req.params.username;
     Users.findOne({userUsername: username}).populate('userFavourites').exec(function (err, user) {
         if (err) {
             console.error(err);
@@ -160,7 +161,20 @@ app.get('/users/username/:username', passport.authenticate('jwt', {session: fals
 });
 
 //Post new user
-app.post('/users', passport.authenticate('jwt', {session: false}), function (req, res) {
+app.post('/users', [
+    check('userForename', 'FAILURE --> USERFORENAME IS REQUIRED').isLength({min: 2}),
+    check('userForename', 'FAILURE --> USERFORENAME MUST BE ALPHA-NUMERICAL').isAlphanumeric(),
+    check('userSurname', 'FAILURE --> USERSURNAME IS REQUIRED').isLength({min: 2}),
+    check('userSurname', 'FAILURE --> USERSURNAME MUST BE ALPHA-NUMERICAL').isAlphanumeric(),
+    check('userUsername', 'FAILURE --> MINIMUM USERUSERNAME LENGTH IS FIVE').isLength({min: 5}),
+    check('userUsername', 'FAILURE --> USERUSERNAME MUST BE ALPHA-NUMERICAL').isAlphanumeric(),
+    check('userCode', 'FAILURE --> MINIMUM USERCODE LENGTH IS TEN').isLength({min: 10}),
+    check('userEmail', 'FAILURE --> REAL USEREMAIL REQUIRED').isEmail()
+], function (req, res) {
+    var fails = validationResult(req);
+    if (!fails.isEmpty()) {
+        return res.status(422).json({FAILURES : fails.array()});
+    }
     const info = req.body;
     var nuCode = Users.mixCode(info.userCode);
     Users.findOne({userUsername: info.userUsername}).then(function (user) {
@@ -189,16 +203,37 @@ app.post('/users', passport.authenticate('jwt', {session: false}), function (req
 });
 
 //Put user update based on username and req body
-app.put('/users/username/:username', passport.authenticate('jwt', {session: false}), function (req, res) {
-    username = req.params.username;
-    newInfo = req.body;
+app.put('/users/username/:username', passport.authenticate('jwt', {session: false}), [
+    //Checks for what is included
+    check('userForename', 'FAILURE --> USERFORENAME IS REQUIRED').optional().isLength({min: 2}),
+    check('userForename', 'FAILURE --> USERFORENAME MUST BE ALPHA-NUMERICAL').optional().isAlphanumeric(),
+    check('userSurname', 'FAILURE --> USERSURNAME IS REQUIRED').optional().isLength({min: 2}),
+    check('userSurname', 'FAILURE --> USERSURNAME MUST BE ALPHA-NUMERICAL').optional().isAlphanumeric(),
+    check('userUsername', 'FAILURE --> MINIMUM USERUSERNAME LENGTH IS FIVE').optional().isLength({min: 5}),
+    check('userUsername', 'FAILURE --> USERUSERNAME MUST BE ALPHA-NUMERICAL').optional().isAlphanumeric(),
+    check('userCode', 'FAILURE --> MINIMUM USERCODE LENGTH IS TEN').optional().isLength({min: 10}),
+    check('userEmail', 'FAILURE --> REAL USEREMAIL REQUIRED').optional().isEmail()
+], function (req, res) {
+    var fails = validationResult(req);
+    if (!fails.isEmpty()) {
+        return res.status(422).json({FAILURES : fails.array()});
+    }
+    
+    const username = req.params.username;
+    const newInfo = req.body;
+    
+    //Hashing for new code if it is in the req body
+    if (newInfo.userCode) {
+    var nuCode = Users.mixCode(newInfo.userCode);
+    }
+    
     Users.findOne({userUsername: username}).then(function (user) {
         if (user) {
             Users.findOneAndUpdate({userUsername: username}, {$set: {
                     userForename: newInfo.userForename,
                     userSurname: newInfo.userSurname,
                     userUsername: newInfo.userUsername,
-                    userCode: newInfo.userCode,
+                    userCode: nuCode,
                     userEmail: newInfo.userEmail,
                     userCelebrate: newInfo.userCelebrate
                 }
@@ -221,7 +256,7 @@ app.put('/users/username/:username', passport.authenticate('jwt', {session: fals
 
 //Delete user based on username
 app.delete('/users/username/:username', passport.authenticate('jwt', {session: false}), function (req, res) {
-    username = req.params.username;
+    const username = req.params.username;
     Users.findOneAndRemove({userUsername: username}).then(function (user) {
         if (user) {
             res.status(200).send(`SUCCESS --> USER WITH USERNAME \u00AB${username}\u00BB REMOVED`);
