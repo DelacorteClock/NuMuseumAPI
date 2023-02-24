@@ -43,7 +43,7 @@ app.get('/', function (req, res) {
 });
 
 //Get info about all items in collection
-app.get('/collection', passport.authenticate('jwt', {session: false}), function (req, res) {
+app.get('/collection', function (req, res) {
     Items.find().populate('artist').populate('department').exec(function (err, items) {
         if (err) {
             console.error(err);
@@ -55,7 +55,7 @@ app.get('/collection', passport.authenticate('jwt', {session: false}), function 
 });
 
 //Get info about item with specific title
-app.get('/collection/title/:title', passport.authenticate('jwt', {session: false}), function (req, res) {
+app.get('/collection/title/:title', function (req, res) {
     const title = req.params.title;
     Items.findOne({title: title}).populate('artist').populate('department').exec(function (err, item) {
         if (err) {
@@ -70,7 +70,7 @@ app.get('/collection/title/:title', passport.authenticate('jwt', {session: false
 });
 
 //Get info about item with specific title
-app.get('/collection/id/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
+app.get('/collection/id/:id', function (req, res) {
     const id = req.params.id;
     Items.findOne({itemId: id}).populate('artist').populate('department').exec(function (err, item) {
         if (err) {
@@ -85,7 +85,7 @@ app.get('/collection/id/:id', passport.authenticate('jwt', {session: false}), fu
 });
 
 //Get info about all departments
-app.get('/departments', passport.authenticate('jwt', {session: false}), function (req, res) {
+app.get('/departments', function (req, res) {
     Departments.find().then(function (departments) {
         res.status(200).json(departments);
     }).catch(function (err) {
@@ -95,7 +95,7 @@ app.get('/departments', passport.authenticate('jwt', {session: false}), function
 });
 
 //Get info about department based on id
-app.get('/departments/id/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
+app.get('/departments/id/:id', function (req, res) {
     const id = req.params.id;
     Departments.findOne({deptId: id}).then(function (department) {
         if (department) {
@@ -110,7 +110,7 @@ app.get('/departments/id/:id', passport.authenticate('jwt', {session: false}), f
 });
 
 //Get info about all artists
-app.get('/artists', passport.authenticate('jwt', {session: false}), function (req, res) {
+app.get('/artists', function (req, res) {
     Artists.find().then(function (artists) {
         res.status(200).json(artists);
     }).catch(function (err) {
@@ -120,7 +120,7 @@ app.get('/artists', passport.authenticate('jwt', {session: false}), function (re
 });
 
 //Get info about artist based on specific name
-app.get('/artists/name/:name', passport.authenticate('jwt', {session: false}), function (req, res) {
+app.get('/artists/name/:name', function (req, res) {
     const name = req.params.name;
     Artists.findOne({artistName: name}).then(function (artist) {
         if (artist) {
@@ -135,7 +135,7 @@ app.get('/artists/name/:name', passport.authenticate('jwt', {session: false}), f
 });
 
 //NEW --> Get info about all users
-app.get('/users', passport.authenticate('jwt', {session: false}), function (req, res) {
+app.get('/users', function (req, res) {
     Users.find().populate('userFavourites').exec(function (err, users) {
         if (err) {
             console.error(err);
@@ -147,7 +147,7 @@ app.get('/users', passport.authenticate('jwt', {session: false}), function (req,
 });
 
 //NEW --> Get info about user based on username
-app.get('/users/username/:username', passport.authenticate('jwt', {session: false}), function (req, res) {
+app.get('/users/username/:username', function (req, res) {
     const username = req.params.username;
     Users.findOne({userUsername: username}).populate('userFavourites').exec(function (err, user) {
         if (err) {
@@ -162,7 +162,7 @@ app.get('/users/username/:username', passport.authenticate('jwt', {session: fals
 });
 
 //Post new user
-app.post('/users', [
+app.post('/users', passport.authenticate('jwt', {session: false}), [
     check('userForename', 'FAILURE --> USERFORENAME IS REQUIRED').isLength({min: 2}),
     check('userForename', 'FAILURE --> USERFORENAME MUST BE ALPHA-NUMERICAL').isAlphanumeric(),
     check('userSurname', 'FAILURE --> USERSURNAME IS REQUIRED').isLength({min: 2}),
