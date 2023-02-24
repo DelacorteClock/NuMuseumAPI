@@ -42,6 +42,11 @@ app.get('/', function (req, res) {
     res.status(200).send('You are in the 16 Feb 2023 version of NuMuseum API. Go to documentation.html to learn how to use it.');
 });
 
+//FunnyText
+app.get('/funnytext', function (req, res) {
+    res.status(200).send('<h1>WelcomeWelcomeWelcome</h1');
+});
+
 //Get info about all items in collection
 app.get('/collection', function (req, res) {
     Items.find().populate('artist').populate('department').exec(function (err, items) {
