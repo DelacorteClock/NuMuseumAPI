@@ -44,7 +44,7 @@ app.get('/', function (req, res) {
 
 //FunnyText
 app.get('/funnytext', function (req, res) {
-    res.status(200).send('<h1>WelcomeWelcomeWelcome</h1');
+    res.status(200).send(`<h1>Welcome<h2>Welcome</h2>Welcome</h1`);
 });
 
 //Get info about all items in collection
