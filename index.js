@@ -162,7 +162,7 @@ app.get('/users/username/:username', function (req, res) {
 });
 
 //Post new user
-app.post('/users', passport.authenticate('jwt', {session: false}), [
+/**********app.post('/users', passport.authenticate('jwt', {session: false}), [
     check('userForename', 'FAILURE --> USERFORENAME IS REQUIRED').isLength({min: 2}),
     check('userForename', 'FAILURE --> USERFORENAME MUST BE ALPHA-NUMERICAL').isAlphanumeric(),
     check('userSurname', 'FAILURE --> USERSURNAME IS REQUIRED').isLength({min: 2}),
@@ -314,7 +314,7 @@ app.delete('/users/username/:username/favitem/:favitemid', passport.authenticate
         console.error(err);
         res.status(500).send('FAILURE --> ' + err);
     });
-});
+});**********/
 
 /* global process */
 const port = process.env.PORT || 1618;
