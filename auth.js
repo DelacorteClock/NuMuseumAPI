@@ -5,8 +5,7 @@ require('./passport');
 
 var generateJWTToken = function (user) {
     return jwt.sign(user, jwtSecret, {
-        //Might cause issue
-        subject: user.userUsername,
+        subject: user.username,
         expiresIn: '7d',
         algorithm: 'HS256'
     });

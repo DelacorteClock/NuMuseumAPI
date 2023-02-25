@@ -15,13 +15,11 @@ var departmentSchema = mongoose.Schema({
 });
 
 var userSchema = mongoose.Schema({
-    userForename: {type: String, required: true},
-    userSurname: {type: String, required: true},
-    userUsername: {type: String, required: true},
-    userCode: {type: String, required: true},
-    userEmail: {type: String, required: true},
-    userCelebrate: Date,
-    userFavourites: [{type: mongoose.Schema.Types.ObjectId, ref: 'Item'}]
+    username: {type: String, required: true},
+    code: {type: String, required: true},
+    email: {type: String, required: true},
+    dmbirthday: Date,
+    favourites: [{type: mongoose.Schema.Types.ObjectId, ref: 'Item'}]
 },{versionKey: false});
 
 userSchema.statics.mixCode = function (code) {
@@ -29,7 +27,7 @@ userSchema.statics.mixCode = function (code) {
 };
 
 userSchema.methods.validateCode = function (code) {
-    return bcrypt.compareSync(code, this.userCode);
+    return bcrypt.compareSync(code, this.code);
 };
 
 var itemSchema = mongoose.Schema({

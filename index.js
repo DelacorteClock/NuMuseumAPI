@@ -39,7 +39,7 @@ app.use((err, req, res, next) => {
 
 //Generic API title
 app.get('/', function (req, res) {
-    res.status(200).send('You are in the 16 Feb 2023 version of NuMuseum API. Go to documentation.html to learn how to use it.');
+    res.status(200).send('You are in the 16 Feb 2023 version (V1) of NuMuseum API \u00ABRubberPants\u00BB Branch II \u00ABSimpl\u00BB. Go to documentation.html to learn how to use it.');
 });
 
 //Get info about all items in collection
@@ -136,7 +136,7 @@ app.get('/artists/name/:name', passport.authenticate('jwt', {session: false}), f
 
 //NEW --> Get info about all users
 app.get('/users', passport.authenticate('jwt', {session: false}), function (req, res) {
-    Users.find().populate('userFavourites').exec(function (err, users) {
+    Users.find().populate('favourites').exec(function (err, users) {
         if (err) {
             console.error(err);
             res.status(500).send('FAILURE --> ' + err);
@@ -149,7 +149,7 @@ app.get('/users', passport.authenticate('jwt', {session: false}), function (req,
 //NEW --> Get info about user based on username
 app.get('/users/username/:username', passport.authenticate('jwt', {session: false}), function (req, res) {
     const username = req.params.username;
-    Users.findOne({userUsername: username}).populate('userFavourites').exec(function (err, user) {
+    Users.findOne({username: username}).populate('favourites').exec(function (err, user) {
         if (err) {
             console.error(err);
             res.status(500).send('FAILURE --> ' + err);
@@ -163,33 +163,27 @@ app.get('/users/username/:username', passport.authenticate('jwt', {session: fals
 
 //Post new user
 app.post('/users', [
-    check('userForename', 'FAILURE --> USERFORENAME IS REQUIRED').isLength({min: 2}),
-    check('userForename', 'FAILURE --> USERFORENAME MUST BE ALPHA-NUMERICAL').isAlphanumeric(),
-    check('userSurname', 'FAILURE --> USERSURNAME IS REQUIRED').isLength({min: 2}),
-    check('userSurname', 'FAILURE --> USERSURNAME MUST BE ALPHA-NUMERICAL').isAlphanumeric(),
-    check('userUsername', 'FAILURE --> MINIMUM USERUSERNAME LENGTH IS FIVE').isLength({min: 5}),
-    check('userUsername', 'FAILURE --> USERUSERNAME MUST BE ALPHA-NUMERICAL').isAlphanumeric(),
-    check('userCode', 'FAILURE --> MINIMUM USERCODE LENGTH IS TEN').isLength({min: 10}),
-    check('userEmail', 'FAILURE --> REAL USEREMAIL REQUIRED').isEmail()
+    check('username', 'FAILURE --> MINIMUM USERNAME LENGTH IS FIVE').isLength({min: 5}),
+    check('username', 'FAILURE --> USERNAME MUST BE ALPHA-NUMERICAL').isAlphanumeric(),
+    check('code', 'FAILURE --> MINIMUM CODE LENGTH IS TEN').isLength({min: 10}),
+    check('email', 'FAILURE --> REAL EMAIL REQUIRED').isEmail()
 ], function (req, res) {
     var fails = validationResult(req);
     if (!fails.isEmpty()) {
         return res.status(422).json({FAILURES: fails.array()});
     }
     const info = req.body;
-    var nuCode = Users.mixCode(info.userCode);
-    Users.findOne({userUsername: info.userUsername}).then(function (user) {
+    var nuCode = Users.mixCode(info.code);
+    Users.findOne({username: info.username}).then(function (user) {
         if (user) {
-            res.status(400).send(`FAILURE --> USER \u00AB${info.userUsername}\u00BB ALREADY CREATED`);
+            res.status(400).send(`FAILURE --> USER \u00AB${info.username}\u00BB ALREADY CREATED`);
         } else {
             Users.create({
-                userForename: info.userForename,
-                userSurname: info.userSurname,
-                userUsername: info.userUsername,
-                userCode: nuCode,
-                userEmail: info.userEmail,
-                userCelebrate: info.userCelebrate,
-                userFavourites: []
+                username: info.username,
+                code: nuCode,
+                email: info.email,
+                dmbirthday: info.dmbirthday,
+                favourites: []
             }).then(function (newuser) {
                 res.status(201).json(newuser);
             }).catch(function (err) {
@@ -206,14 +200,10 @@ app.post('/users', [
 //Put user update based on username and req body
 app.put('/users/username/:username', passport.authenticate('jwt', {session: false}), [
     //Checks for what is included
-    check('userForename', 'FAILURE --> USERFORENAME IS REQUIRED').optional().isLength({min: 2}),
-    check('userForename', 'FAILURE --> USERFORENAME MUST BE ALPHA-NUMERICAL').optional().isAlphanumeric(),
-    check('userSurname', 'FAILURE --> USERSURNAME IS REQUIRED').optional().isLength({min: 2}),
-    check('userSurname', 'FAILURE --> USERSURNAME MUST BE ALPHA-NUMERICAL').optional().isAlphanumeric(),
-    check('userUsername', 'FAILURE --> MINIMUM USERUSERNAME LENGTH IS FIVE').optional().isLength({min: 5}),
-    check('userUsername', 'FAILURE --> USERUSERNAME MUST BE ALPHA-NUMERICAL').optional().isAlphanumeric(),
-    check('userCode', 'FAILURE --> MINIMUM USERCODE LENGTH IS TEN').optional().isLength({min: 10}),
-    check('userEmail', 'FAILURE --> REAL USEREMAIL REQUIRED').optional().isEmail()
+    check('username', 'FAILURE --> MINIMUM USERNAME LENGTH IS FIVE').optional().isLength({min: 5}),
+    check('username', 'FAILURE --> USERNAME MUST BE ALPHA-NUMERICAL').optional().isAlphanumeric(),
+    check('code', 'FAILURE --> MINIMUM CODE LENGTH IS TEN').optional().isLength({min: 10}),
+    check('email', 'FAILURE --> REAL EMAIL REQUIRED').optional().isEmail()
 ], function (req, res) {
     var fails = validationResult(req);
     if (!fails.isEmpty()) {
@@ -224,19 +214,17 @@ app.put('/users/username/:username', passport.authenticate('jwt', {session: fals
     const newInfo = req.body;
 
     //Hashing for new code if it is in the req body
-    if (newInfo.userCode) {
-        var nuCode = Users.mixCode(newInfo.userCode);
+    if (newInfo.code) {
+        var nuCode = Users.mixCode(newInfo.code);
     }
 
-    Users.findOne({userUsername: username}).then(function (user) {
+    Users.findOne({username: username}).then(function (user) {
         if (user) {
-            Users.findOneAndUpdate({userUsername: username}, {$set: {
-                    userForename: newInfo.userForename,
-                    userSurname: newInfo.userSurname,
-                    userUsername: newInfo.userUsername,
-                    userCode: nuCode,
-                    userEmail: newInfo.userEmail,
-                    userCelebrate: newInfo.userCelebrate
+            Users.findOneAndUpdate({username: username}, {$set: {
+                    username: newInfo.username,
+                    code: nuCode,
+                    email: newInfo.email,
+                    dmbirthday: newInfo.dmbirthday
                 }
             }, {new : true}, function (err, updatedInfo) {
                 if (err) {
@@ -258,7 +246,7 @@ app.put('/users/username/:username', passport.authenticate('jwt', {session: fals
 //Delete user based on username
 app.delete('/users/username/:username', passport.authenticate('jwt', {session: false}), function (req, res) {
     const username = req.params.username;
-    Users.findOneAndRemove({userUsername: username}).then(function (user) {
+    Users.findOneAndRemove({username: username}).then(function (user) {
         if (user) {
             res.status(200).send(`SUCCESS --> USER WITH USERNAME \u00AB${username}\u00BB REMOVED`);
         } else {
@@ -273,9 +261,9 @@ app.delete('/users/username/:username', passport.authenticate('jwt', {session: f
 //Post favourite item based on username and item's unique id
 app.post('/users/username/:username/favitem/:favitemid', passport.authenticate('jwt', {session: false}), function (req, res) {
     const {username, favitemid} = req.params;
-    Users.findOne({userUsername: username}).then(function (user) {
+    Users.findOne({username: username}).then(function (user) {
         if (user) {
-            Users.findOneAndUpdate({userUsername: username}, {$addToSet: {userFavourites: favitemid}}, {new : true}, function (err, updatedInfo) {
+            Users.findOneAndUpdate({username: username}, {$addToSet: {favourites: favitemid}}, {new : true}, function (err, updatedInfo) {
                 if (err) {
                     console.error(err);
                     res.status(500).send('FAILURE --> ' + err);
@@ -296,9 +284,9 @@ app.post('/users/username/:username/favitem/:favitemid', passport.authenticate('
 //Delete favourite item based on username and item's unique id
 app.delete('/users/username/:username/favitem/:favitemid', passport.authenticate('jwt', {session: false}), function (req, res) {
     const {username, favitemid} = req.params;
-    Users.findOne({userUsername: username}).then(function (user) {
+    Users.findOne({username: username}).then(function (user) {
         if (user) {
-            Users.findOneAndUpdate({userUsername: username}, {$pull: {userFavourites: favitemid}}, {new : true}, function (err, updatedInfo) {
+            Users.findOneAndUpdate({username: username}, {$pull: {favourites: favitemid}}, {new : true}, function (err, updatedInfo) {
                 if (err) {
                     console.error(err);
                     res.status(500).send('FAILURE --> ' + err);
@@ -319,6 +307,6 @@ app.delete('/users/username/:username/favitem/:favitemid', passport.authenticate
 /* global process */
 const port = process.env.PORT || 1618;
 app.listen(port, '0.0.0.0', () => {
-    console.log('THIS IS NUMUSEUM PUBLIC VERSION 1 \u00ABRubberPants\u00BB WORKING ON ' + port);
+    console.log('THIS IS NUMUSEUM PUBLIC VERSION 1 \u00ABRubberPants\u00BB BRANCH 2 \u00ABSimpl\u00BB WORKING ON ' + port);
 });
 
