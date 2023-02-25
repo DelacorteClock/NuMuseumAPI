@@ -178,11 +178,12 @@ app.post('/users', [
         if (user) {
             res.status(400).send(`FAILURE --> USER \u00AB${info.username}\u00BB ALREADY CREATED`);
         } else {
+            var mixDate = new Date(info.dmbirthday);
             Users.create({
                 username: info.username,
                 code: nuCode,
                 email: info.email,
-                dmbirthday: info.dmbirthday,
+                dmbirthday: mixDate.setFullYear(1618),
                 favourites: []
             }).then(function (newuser) {
                 res.status(201).json(newuser);
