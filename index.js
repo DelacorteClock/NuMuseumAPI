@@ -9,8 +9,8 @@ const Artists = Models.Artist;
 const Departments = Models.Department;
 const Items = Models.Item;
 const Users = Models.User;
-mongoose.connect('mongodb://127.0.0.1:27017/NuMuseumV2', {useNewUrlParser: true, useUnifiedTopology: true});
-//mongoose.connect(process.env.RUBBERSUIT, {useNewUrlParser: true, useUnifiedTopology: true});
+//mongoose.connect('mongodb://127.0.0.1:27017/NuMuseumV2', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(process.env.RUBBERSUIT, {useNewUrlParser: true, useUnifiedTopology: true});
 
 //Add requests to log
 app.use(morgan('combined'));
