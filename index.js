@@ -221,11 +221,12 @@ app.put('/users/username/:username', passport.authenticate('jwt', {session: fals
 
     Users.findOne({username: username}).then(function (user) {
         if (user) {
+            var mixDate = new Date(newInfo.dmbirthday);
             Users.findOneAndUpdate({username: username}, {$set: {
                     username: newInfo.username,
                     code: nuCode,
                     email: newInfo.email,
-                    dmbirthday: newInfo.dmbirthday.setFullYear(1618)
+                    dmbirthday: mixDate.setFullYear(1618)
                 }
             }, {new : true}, function (err, updatedInfo) {
                 if (err) {
