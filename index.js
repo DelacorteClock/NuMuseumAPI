@@ -189,7 +189,7 @@ app.post('/users', [
                 userUsername: info.userUsername,
                 userCode: nuCode,
                 userEmail: info.userEmail,
-                userCelebrate: mixDate.setFullYear(1618),
+                userCelebrate: mixDate.setUTCFullYear(1618),
                 userFavourites: []
             }).then(function (newuser) {
                 res.status(201).json(newuser);
@@ -238,7 +238,7 @@ app.put('/users/username/:username', passport.authenticate('jwt', {session: fals
                     userUsername: newInfo.userUsername,
                     userCode: nuCode,
                     userEmail: newInfo.userEmail,
-                    userCelebrate: mixDate.setFullYear(1618)
+                    userCelebrate: mixDate.setUTCFullYear(1618)
                 }
             }, {new : true}, function (err, updatedInfo) {
                 if (err) {
