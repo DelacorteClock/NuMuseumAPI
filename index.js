@@ -182,13 +182,14 @@ app.post('/users', [
         if (user) {
             res.status(400).send(`FAILURE --> USER \u00AB${info.userUsername}\u00BB ALREADY CREATED`);
         } else {
+            var mixDate = new Date(info.userCelebrate);
             Users.create({
                 userForename: info.userForename,
                 userSurname: info.userSurname,
                 userUsername: info.userUsername,
                 userCode: nuCode,
                 userEmail: info.userEmail,
-                userCelebrate: info.userCelebrate,
+                userCelebrate: mixDate.setFullYear(1618),
                 userFavourites: []
             }).then(function (newuser) {
                 res.status(201).json(newuser);
@@ -230,13 +231,14 @@ app.put('/users/username/:username', passport.authenticate('jwt', {session: fals
 
     Users.findOne({userUsername: username}).then(function (user) {
         if (user) {
+            var mixDate = new Date(newInfo.userCelebrate);
             Users.findOneAndUpdate({userUsername: username}, {$set: {
                     userForename: newInfo.userForename,
                     userSurname: newInfo.userSurname,
                     userUsername: newInfo.userUsername,
                     userCode: nuCode,
                     userEmail: newInfo.userEmail,
-                    userCelebrate: newInfo.userCelebrate
+                    userCelebrate: mixDate.setFullYear(1618)
                 }
             }, {new : true}, function (err, updatedInfo) {
                 if (err) {
