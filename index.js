@@ -9,8 +9,8 @@ const Artists = Models.Artist;
 const Departments = Models.Department;
 const Items = Models.Item;
 const Users = Models.User;
-//mongoose.connect('mongodb://127.0.0.1:27017/NuMuseumV2', {useNewUrlParser: true, useUnifiedTopology: true});
-mongoose.connect(process.env.RUBBERSUIT, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://127.0.0.1:27017/NuMuseumV2', {useNewUrlParser: true, useUnifiedTopology: true});
+//mongoose.connect(process.env.RUBBERSUIT, {useNewUrlParser: true, useUnifiedTopology: true});
 
 //Add requests to log
 app.use(morgan('combined'));
@@ -183,7 +183,7 @@ app.post('/users', [
                 username: info.username,
                 code: nuCode,
                 email: info.email,
-                dmbirthday: mixDate.setFullYear(1618),
+                dmbirthday: mixDate.setUTCFullYear(1618),
                 favourites: []
             }).then(function (newuser) {
                 res.status(201).json(newuser);
@@ -226,7 +226,7 @@ app.put('/users/username/:username', passport.authenticate('jwt', {session: fals
                     username: newInfo.username,
                     code: nuCode,
                     email: newInfo.email,
-                    dmbirthday: mixDate.setFullYear(1618)
+                    dmbirthday: mixDate.setUTCFullYear(1618)
                 }
             }, {new : true}, function (err, updatedInfo) {
                 if (err) {
