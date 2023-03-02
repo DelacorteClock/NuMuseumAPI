@@ -15,8 +15,8 @@ mongoose.connect(process.env.RUBBERSUIT, {useNewUrlParser: true, useUnifiedTopol
 //Add requests to log
 app.use(morgan('combined'));
 
-//For documentation.html and css
-app.use(express.static('public'));
+//For personal use
+app.use('/bus', express.static('buses'));
 
 //For body parser
 app.use(bodyParser.json());
