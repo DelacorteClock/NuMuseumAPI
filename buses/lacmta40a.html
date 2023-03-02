@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <title>Buses by RubberSpaceSuit</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div id='images'></div>
+        <script>
+            imageContainer = document.querySelector('#images');
+            var urlpre = 'https://delacorteclock.github.io/bus/';
+            var files = ['P1010159.JPG','P1010155.JPG','P1010160.JPG','P1010127.JPG','P1010123.JPG'];
+            files.forEach(function (ending) {
+                console.log(`<img src='${urlpre}${ending}' width='300px'>`);
+                imageContainer.innerHTML += `<img src='${urlpre}${ending}' width='300px'>`;
+            });
+        </script>
+    </body>
+</html>
