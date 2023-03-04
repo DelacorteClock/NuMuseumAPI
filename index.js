@@ -43,7 +43,7 @@ app.get('/', function (req, res) {
 });
 
 //Get info about all items in collection
-app.get('/collection', function (req, res) {
+app.get('/collection', passport.authenticate('jwt', {session: false}), function (req, res) {
     Items.find().populate('artist').populate('department').exec(function (err, items) {
         if (err) {
             console.error(err);
@@ -55,7 +55,7 @@ app.get('/collection', function (req, res) {
 });
 
 //Get info about item with specific title
-app.get('/collection/title/:title', function (req, res) {
+app.get('/collection/title/:title', passport.authenticate('jwt', {session: false}), function (req, res) {
     const title = req.params.title;
     Items.findOne({title: title}).populate('artist').populate('department').exec(function (err, item) {
         if (err) {
@@ -70,7 +70,7 @@ app.get('/collection/title/:title', function (req, res) {
 });
 
 //Get info about item with specific title
-app.get('/collection/id/:id', function (req, res) {
+app.get('/collection/id/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
     const id = req.params.id;
     Items.findOne({itemId: id}).populate('artist').populate('department').exec(function (err, item) {
         if (err) {
