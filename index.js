@@ -54,6 +54,16 @@ app.get('/collection', passport.authenticate('jwt', {session: false}), function 
     });
 });
 
+//Collection with no populate
+app.get('/min/collection', passport.authenticate('jwt', {session: false}), function (req, res) {
+    Items.find().then(function (items) {
+        res.status(200).json(items);
+    }).catch(function (err) {
+        console.error(err);
+        res.status(500).send('FAILURE --> ' + err);
+    });
+});
+
 //Get info about item with specific title
 app.get('/collection/title/:title', passport.authenticate('jwt', {session: false}), function (req, res) {
     const title = req.params.title;
