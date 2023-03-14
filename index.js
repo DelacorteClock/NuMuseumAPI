@@ -171,6 +171,17 @@ app.get('/users/username/:username', passport.authenticate('jwt', {session: fals
     });
 });
 
+//NEW --> No populate user
+app.get('/min/users/username/:username', passport.authenticate('jwt', {session: false}), function (req, res) {
+    const username = req.params.username;
+    Users.findOne({userUsername: username}).then(function (user) {
+        res.status(200).json(user);
+    }).catch(function (err) {
+        console.error(err);
+        res.status(500).send('FAILURE --> ' + err);
+    });
+});
+
 //Post new user
 app.post('/users', [
     check('userForename', 'FAILURE --> USERFORENAME IS REQUIRED').isLength({min: 2}),
