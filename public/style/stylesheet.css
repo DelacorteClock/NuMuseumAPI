@@ -82,6 +82,11 @@ body {
     text-align: center;
 }
 
+table {
+    max-width: 80vw;
+    word-wrap: anywhere;
+}
+
 td {
     border: 1px solid;
     border-color: white;
