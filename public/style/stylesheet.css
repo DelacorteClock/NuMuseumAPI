@@ -76,15 +76,19 @@ body {
     color: var(--altbackground);
     background-color: var(--keybrown);
     font-size: var(--defaultsize);
-    max-width: 80vw;
+    max-width: 90vw;
     margin: 50px auto;
     line-height: 100%;
     text-align: center;
 }
 
 table {
-    max-width: 80vw;
+    max-width: 90vw;
     word-wrap: anywhere;
+}
+
+.no-wrap {
+    word-wrap: normal;
 }
 
 td {
